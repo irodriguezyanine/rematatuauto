@@ -1,55 +1,67 @@
 import { useEffect, useState } from 'react'
-import { LandingForm } from '@/components/LandingForm'
-import { VedisaMark } from '@/components/VedisaMark'
-import { footerLegalDraft, PRIVACY_URL, TERMS_URL } from '@/content/legalDraft'
+import { LandingForm, type LeadPrefill } from '@/components/LandingForm'
+import { VedisaLogo } from '@/components/VedisaLogo'
+import { footerLegalShort, PRIVACY_URL, TERMS_URL } from '@/content/legalCopy'
 import { defaultCanonicalHref } from '@/lib/productionDomains'
 import { WHATSAPP_HREF } from '@/lib/config'
+import { yearRange } from '@/lib/format'
 
 const LINKS = [
   {
-    title: 'Remates y subastas Vedisa',
-    desc: 'Portal principal de licitaciones y lotes en curso.',
+    title: 'Remates Vedisa',
+    desc: 'Vehiculos siniestrados y subastas en curso.',
     href: 'https://vehiculoschocados.cl/',
-    cta: 'Ir a remates',
+    cta: 'Ver remates',
   },
   {
-    title: 'Catalogo oficial',
-    desc: 'Inventario Vedisa con filtros, 3D GLO3D y ventas directas.',
+    title: 'Catalogo Vedisa',
+    desc: 'Inventario oficial y unidades destacadas.',
     href: 'https://catalogo.vedisaremates.cl/',
-    cta: 'Ver catalogo',
+    cta: 'Abrir catalogo',
   },
   {
     title: 'Vehiculos de ocasion',
-    desc: 'Automotora de seminuevos y stock listo para cerrar.',
+    desc: 'Seminuevos y stock listo entre particulares Vedisa.',
     href: 'https://vehiculosdeocasion.cl/',
-    cta: 'Ir a seminuevos',
+    cta: 'Ver stock',
+  },
+] as const
+
+const STEPS = [
+  {
+    title: 'Cuentanos tu auto',
+    body: 'Completa patente y datos: si podemos, completamos modelo y referencias de forma automatica.',
+  },
+  {
+    title: 'Fotos claras',
+    body: 'Cuanto mas detalle aportes, mas precisa puede ser la primera conversacion con tu ejecutivo.',
+  },
+  {
+    title: 'Revision comercial',
+    body: 'Negocio Vedisa analiza tu caso y agenda el siguiente paso: valor final sujeto a inspeccion donde corresponda.',
+  },
+  {
+    title: 'Remate y publicacion',
+    body: 'El vehiculo puede ingresar al circuito Vedisa de remate u otras rutas comerciales definidas con el equipo.',
   },
 ] as const
 
 const FAQ = [
   {
-    q: 'Cuanto demora una respuesta?',
-    a: 'Un ejecutivo comercial revisa cada ingreso prioritariamente durante horario habil.',
+    q: 'Tiene costo dejar una solicitud?',
+    a: 'No. Usar este formulario como primer contacto es sin cargo para el propietario.',
   },
   {
-    q: 'Es gratis la evaluacion?',
-    a: 'Si. La pagina registra tus datos y fotos solo para iniciar una conversacion comercial Vedisa.',
+    q: 'Cuanto demora el contacto inicial?',
+    a: 'Priorizamos las solicitudes durante horario laboral en Chile. El equipo comercial responde llamada, correo o WhatsApp segun lo que indiques.',
   },
   {
-    q: 'Puedo visitar el vehiculo en bodega?',
-    a: 'Si. Coordinamos inspeccion presencial segun el tipo de proceso (remate o venta directa).',
+    q: 'Las cifras que veo son valor final de remate?',
+    a: 'Las referencias en pantalla son solo orientativas. El valor y condiciones aplicables dependen del negocio vigente cuando se revise el vehiculo.',
   },
   {
-    q: 'Son los mismos destinos que antes?',
-    a: 'Formspree sigue llegando al mismo lugar que vende tu auto en vehiculoschocados.cl; Cloudinary usa el mismo preset publico Vedisa. Si cambias dominio revisa lista de dominios en Formspree (documentado en docs/DESPLEGUE-Y-DOMINIO.md).',
-  },
-  {
-    q: 'Los textos legales ya estan cerrados?',
-    a: 'No. El bloque antes del boton enviar y el pie de esta pagina son borrador marcado REVISION JURIDICA — los PDF o paginas que ya publicaste en vehiculoschocados.cl tienen prevalencia hasta que vueles version final.',
-  },
-  {
-    q: 'Sirve en mas de un dominio?',
-    a: 'Si: produccion oficial en rematatuauto.cl y rematatuauto.com al mismo proyecto. Si Formspree restringe origen HTTPS, permite ambos. Canonical y SEO opcional ver docs/DESPLEGUE-Y-DOMINIO.md.',
+    q: 'Puedo ver el auto en bodega?',
+    a: 'Si el proceso lo permite, coordina inspeccion presencial con tu ejecutivo Vedisa.',
   },
 ] as const
 
@@ -68,8 +80,76 @@ function ChevronDown({ open }: { open: boolean }) {
   )
 }
 
+function HeroQuickLead({
+  onSubmit,
+}: {
+  onSubmit: (data: LeadPrefill) => void
+}) {
+  const years = yearRange()
+  const [anio, setAnio] = useState(String(years[0]))
+  const [marca, setMarca] = useState('')
+  const [modelo, setModelo] = useState('')
+
+  return (
+    <form
+      className="mt-10 grid gap-3 sm:grid-cols-[1fr_1fr_1fr_auto]"
+      onSubmit={(e) => {
+        e.preventDefault()
+        onSubmit({
+          ...(anio ? { anio } : {}),
+          ...(marca.trim() ? { marca: marca.trim() } : {}),
+          ...(modelo.trim() ? { modelo: modelo.trim() } : {}),
+        })
+        document.getElementById('cotizar')?.scrollIntoView({ behavior: 'smooth' })
+      }}
+    >
+      <div>
+        <label className="mb-2 block text-left text-[11px] font-bold uppercase tracking-wider text-slate-600">Anio</label>
+        <select
+          value={anio}
+          onChange={(e) => setAnio(e.target.value)}
+          className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-[15px] font-semibold text-slate-900 outline-none ring-slate-200 focus:ring-2"
+        >
+          {years.map((y) => (
+            <option key={y} value={String(y)}>
+              {y}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div>
+        <label className="mb-2 block text-left text-[11px] font-bold uppercase tracking-wider text-slate-600">Marca</label>
+        <input
+          value={marca}
+          onChange={(e) => setMarca(e.target.value)}
+          placeholder="Ej. Hyundai"
+          className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-[15px] outline-none focus:ring-2 focus:ring-slate-200"
+        />
+      </div>
+      <div>
+        <label className="mb-2 block text-left text-[11px] font-bold uppercase tracking-wider text-slate-600">Modelo</label>
+        <input
+          value={modelo}
+          onChange={(e) => setModelo(e.target.value)}
+          placeholder="Ej. Tucson"
+          className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-[15px] outline-none focus:ring-2 focus:ring-slate-200"
+        />
+      </div>
+      <div className="flex items-end">
+        <button
+          type="submit"
+          className="w-full shrink-0 rounded-2xl bg-slate-900 px-8 py-3.5 text-[15px] font-bold text-white transition hover:bg-slate-800 sm:w-auto"
+        >
+          Pedir tasacion
+        </button>
+      </div>
+    </form>
+  )
+}
+
 export default function App() {
   const [openFaq, setOpenFaq] = useState<number | null>(0)
+  const [leadPrefill, setLeadPrefill] = useState<LeadPrefill | null>(null)
 
   useEffect(() => {
     const explicit = import.meta.env.VITE_PUBLIC_SITE_URL?.trim()
@@ -85,31 +165,31 @@ export default function App() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#f6f8fc] text-slate-900">
-      <header className="sticky top-0 z-40 border-b border-white/60 bg-white/85 backdrop-blur-md">
-        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 md:px-6">
-          <a href="#" className="flex items-center gap-2">
-            <VedisaMark />
+    <div className="min-h-screen bg-[#fafbfc] text-slate-900">
+      <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur-md">
+        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 md:px-6">
+          <a href="#" className="flex items-center">
+            <VedisaLogo variant="header" />
           </a>
-          <nav className="hidden items-center gap-8 text-sm font-bold text-slate-600 md:flex">
-            <a href="#cotizar" className="hover:text-cyan-600">
-              Cotizar
+          <nav className="hidden items-center gap-8 text-sm font-semibold text-slate-600 md:flex">
+            <a href="#como-funciona" className="transition hover:text-slate-900">
+              Como funciona
             </a>
-            <a href="#enlaces" className="hover:text-cyan-600">
-              Enlaces
+            <a href="#cotizar" className="transition hover:text-slate-900">
+              Tasar mi auto
             </a>
-            <a href="#faq" className="hover:text-cyan-600">
-              FAQ
+            <a href="#faq" className="transition hover:text-slate-900">
+              Preguntas
             </a>
-            <a href="#aviso-legal" className="hover:text-cyan-600">
-              Aviso legal
+            <a href="#legales" className="transition hover:text-slate-900">
+              Legales
             </a>
           </nav>
           <a
             href={WHATSAPP_HREF}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full bg-slate-900 px-4 py-2.5 text-xs font-extrabold text-white shadow-lg shadow-slate-900/15 transition hover:bg-slate-800 md:text-sm"
+            className="hidden rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-slate-50 sm:inline-flex"
           >
             WhatsApp
           </a>
@@ -117,115 +197,100 @@ export default function App() {
       </header>
 
       <main>
-        <section className="relative overflow-hidden">
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-cyan-200/50 via-transparent to-transparent" />
-          <div className="pointer-events-none absolute -right-24 top-20 h-72 w-72 rounded-full bg-[#FFC600]/20 blur-3xl" />
-          <div className="relative mx-auto grid max-w-6xl gap-12 px-4 pb-16 pt-10 md:grid-cols-2 md:items-center md:px-6 md:pb-24 md:pt-16">
-            <div>
-              <p className="inline-flex items-center gap-2 rounded-full border border-cyan-200/80 bg-white/80 px-4 py-1.5 text-xs font-bold uppercase tracking-wider text-cyan-800 shadow-sm">
-                VEDISA REMATES · Chile
-              </p>
-              <h1 className="mt-6 text-4xl font-black leading-[1.05] tracking-tight text-slate-950 md:text-5xl lg:text-[3.25rem]">
-                Remata tu auto con el respaldo de quienes llevan decadas en subastas.
-              </h1>
-              <p className="mt-5 max-w-lg text-lg leading-relaxed text-slate-600">
-                Flujo inspirado en experiencias como Kavak: menos pasos, titulares claros y un solo envio. Autored llena
-                marca, modelo y referencias de precio tan pronto ingresas la patente.
-              </p>
-              <ul className="mt-8 space-y-4">
-                {[
-                  'Evaluacion sin costo para iniciar el proceso.',
-                  'Logistica y vitrina en ecosistema Vedisa.',
-                  'Mismas integraciones productivas: Formspree + Cloudinary + Supabase/Autored.',
-                ].map((t) => (
-                  <li key={t} className="flex gap-3 text-[15px] font-semibold text-slate-700">
-                    <span
-                      className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-cyan-500 text-[11px] font-black leading-none text-white"
-                      aria-hidden
-                    >
-                      {'\u2713'}
-                    </span>
-                    {t}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-10 flex flex-wrap gap-3">
-                <a
-                  href="#cotizar"
-                  className="inline-flex rounded-2xl bg-gradient-to-r from-[#33C7E3] to-[#1fa8c7] px-8 py-4 text-sm font-black text-white shadow-xl shadow-cyan-500/30 transition hover:brightness-[1.03]"
-                >
-                  Comenzar ahora
-                </a>
-                <a
-                  href="tel:+56989323397"
-                  className="inline-flex items-center rounded-2xl border-2 border-slate-200 bg-white px-6 py-4 text-sm font-bold text-slate-800 hover:border-cyan-300"
-                >
-                  +56 9 8932 3397
-                </a>
-              </div>
-            </div>
+        <section className="relative border-b border-slate-100 bg-white">
+          <div className="mx-auto max-w-5xl px-4 pb-16 pt-12 md:px-6 md:pb-24 md:pt-16">
+            <p className="text-center text-sm font-semibold text-slate-500">REMATA TU AUTO by VEDISA REMATES</p>
+            <h1 className="mx-auto mt-4 max-w-3xl text-center text-4xl font-bold leading-[1.12] tracking-tight text-slate-950 md:text-5xl lg:text-[3.125rem]">
+              Remata tu vehiculo con quien lleva anos maximizando el recupero en Chile
+            </h1>
+            <p className="mx-auto mt-5 max-w-2xl text-center text-lg text-slate-600 md:text-xl">
+              Una experiencia de venta enfocada en claridad como en grandes plataformas digitales, adaptada al negocio de
+              autos siniestrados y perdidos con los estandares Vedisa.
+            </p>
 
-            <div className="relative">
-              <div className="absolute -inset-4 rounded-[32px] bg-gradient-to-br from-cyan-300/35 to-[#FFC600]/25 blur-2xl md:-inset-8" />
-              <div className="relative rounded-[28px] border border-white bg-white/95 p-6 shadow-2xl backdrop-blur lg:p-10">
-                <div className="flex items-start justify-between gap-4 border-b border-slate-100 pb-5">
-                  <div>
-                    <div className="text-xs font-bold uppercase tracking-[0.2em] text-cyan-600">Tu patente primero</div>
-                    <p className="mt-2 text-sm font-semibold text-slate-600">
-                      Autored pre-llena ficha tecnica cuando la patente esta disponible.
-                    </p>
-                  </div>
-                  <span className="rounded-xl bg-emerald-50 px-2 py-1 text-[10px] font-black uppercase text-emerald-800">
-                    Autored
-                  </span>
-                </div>
-                <div className="mt-8 space-y-4">
-                  <div className="h-14 rounded-2xl bg-gradient-to-br from-slate-100 via-white to-slate-50 px-5 py-5 shadow-inner ring-1 ring-slate-100" />
-                  <div className="grid grid-cols-2 gap-3">
-                    <div className="h-28 rounded-2xl bg-slate-100/80 shadow-inner ring-1 ring-black/5" />
-                    <div className="h-28 rounded-2xl bg-cyan-50/80 shadow-inner ring-1 ring-cyan-100" />
-                  </div>
-                  <div className="h-36 rounded-[24px] border border-dashed border-cyan-200 bg-cyan-50/40" />
-                </div>
-                <a
-                  href="#cotizar"
-                  className="mt-10 flex w-full items-center justify-center rounded-2xl bg-slate-900 py-4 text-sm font-black text-white transition hover:bg-slate-800"
-                >
-                  Ir al formulario
-                </a>
-              </div>
+            <div className="mx-auto mt-12 max-w-3xl rounded-3xl border border-slate-100 bg-slate-50/80 p-6 shadow-xl shadow-slate-900/[0.06] md:p-8">
+              <p className="text-center text-sm font-bold text-slate-800">Completa estos datos como primer paso</p>
+              <HeroQuickLead onSubmit={(d) => setLeadPrefill(d)} />
+              <p className="mt-4 text-center text-xs text-slate-500">
+                Usa Pedir tasacion para bajar hasta el formulario completo donde ingresaras patente, kilometraje y fotos del
+                auto.
+              </p>
             </div>
           </div>
         </section>
 
-        <section id="cotizar" className="mx-auto max-w-6xl scroll-mt-28 px-4 pb-24 md:px-6">
-          <LandingForm id="cotizar-form" />
+        <section id="como-funciona" className="scroll-mt-28 border-b border-slate-100 bg-white py-16 md:py-24">
+          <div className="mx-auto max-w-5xl px-4 md:px-6">
+            <h2 className="text-center text-2xl font-bold text-slate-950 md:text-3xl">Como avanza tu proceso con Vedisa</h2>
+            <p className="mx-auto mt-3 max-w-2xl text-center text-[15px] leading-relaxed text-slate-600">
+              Pensado para lograr menos fricciones y mas conversion: titulares directos y pasos concretos, similar en espiritu al
+              flujo de cotizacion de{' '}
+              <a href="https://www.kavak.com/cl/vende-tu-auto" target="_blank" rel="noopener noreferrer" className="font-semibold text-cyan-700 underline decoration-cyan-400/60">
+                Kavak — Vende tu auto
+              </a>
+              .
+            </p>
+            <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+              {STEPS.map((step, idx) => (
+                <article key={step.title} className="relative rounded-2xl border border-slate-100 bg-[#fafbfc] p-6 pt-12">
+                  <span className="absolute left-6 top-6 flex h-8 w-8 items-center justify-center rounded-full bg-[#33C7E3] text-sm font-bold text-white">
+                    {idx + 1}
+                  </span>
+                  <h3 className="text-lg font-bold text-slate-900">{step.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{step.body}</p>
+                </article>
+              ))}
+            </div>
+          </div>
         </section>
 
-        <section id="enlaces" className="scroll-mt-28 border-t border-slate-200/80 bg-white py-20">
-          <div className="mx-auto max-w-6xl px-4 md:px-6">
-            <div className="max-w-2xl">
-              <h2 className="text-3xl font-black tracking-tight text-slate-900 md:text-4xl">Enlaces de interes</h2>
-              <p className="mt-3 text-[15px] leading-relaxed text-slate-600">
-                Direcciona a tus usuarios entre remate oficial, inventario Vedisa catalogo web y compraventa de seminuevos.
-              </p>
-            </div>
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
+        <section className="border-b border-slate-100 bg-[#0f172a] py-12 text-center text-white">
+          <div className="mx-auto max-w-3xl px-4 md:px-6">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#33C7E3]">Maximizar recupero vehicular</p>
+            <h2 className="mt-3 text-2xl font-bold md:text-3xl">Miles de unidades liquidadas con respaldo documental Vedisa</h2>
+            <p className="mt-4 text-[15px] leading-relaxed text-slate-300">
+              El formulario siguiente concentra toda la informacion que necesitamos para hacerte volver llamada rapido.
+            </p>
+            <a
+              href="#cotizar"
+              className="mt-8 inline-flex rounded-2xl bg-[#FFC600] px-8 py-4 text-sm font-bold text-slate-900 transition hover:brightness-105"
+            >
+              Ir al formulario completo
+            </a>
+          </div>
+        </section>
+
+        <section id="cotizar" className="scroll-mt-24 bg-[#fafbfc] py-16 md:py-20">
+          <div className="mx-auto max-w-5xl px-4 md:px-6">
+            <LandingForm
+              id="cotizar-form"
+              prefill={leadPrefill}
+              onPrefillConsumed={() => setLeadPrefill(null)}
+            />
+          </div>
+        </section>
+
+        <section id="referidos" className="scroll-mt-28 border-t border-slate-100 bg-white py-20">
+          <div className="mx-auto max-w-5xl px-4 md:px-6">
+            <h2 className="text-2xl font-bold text-slate-950 md:text-3xl">Tambien te puede interesar</h2>
+            <p className="mt-2 max-w-2xl text-[15px] text-slate-600">
+              Remates en linea VehiculosChocados.cl, catalogo Vedisa oficial y automotora Vehiculos de ocasion.
+            </p>
+            <div className="mt-10 grid gap-6 md:grid-cols-3">
               {LINKS.map((item) => (
                 <article
                   key={item.href}
-                  className="group flex flex-col rounded-[24px] border border-slate-100 bg-gradient-to-b from-slate-50 to-white p-7 shadow-xl shadow-slate-900/[0.04] ring-1 ring-black/[0.02] transition hover:-translate-y-1 hover:shadow-2xl"
+                  className="flex flex-col rounded-3xl border border-slate-100 bg-white p-7 shadow-lg shadow-slate-900/[0.04] transition hover:-translate-y-0.5 hover:shadow-xl"
                 >
-                  <h3 className="text-xl font-black text-slate-900">{item.title}</h3>
-                  <p className="mt-3 grow text-sm leading-relaxed text-slate-600">{item.desc}</p>
+                  <h3 className="text-lg font-bold text-slate-900">{item.title}</h3>
+                  <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">{item.desc}</p>
                   <a
                     href={item.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-6 inline-flex w-fit items-center gap-2 text-sm font-black text-cyan-600 underline decoration-cyan-300 underline-offset-4 group-hover:decoration-cyan-600"
+                    className="mt-6 inline-flex text-sm font-bold text-[#0891b2] underline decoration-cyan-500/40 underline-offset-4 hover:decoration-cyan-600"
                   >
                     {item.cta}
-                    <span aria-hidden> -&gt;</span>
                   </a>
                 </article>
               ))}
@@ -233,24 +298,24 @@ export default function App() {
           </div>
         </section>
 
-        <section id="faq" className="scroll-mt-28 pb-28">
-          <div className="mx-auto max-w-3xl px-4 md:px-6">
-            <h2 className="text-center text-3xl font-black text-slate-900 md:text-4xl">Preguntas frecuentes</h2>
-            <p className="mx-auto mt-3 max-w-xl text-center text-[15px] text-slate-600">
-              Respuestas rapidas antes de registrar tu solicitud.
-            </p>
-            <div className="mt-10 divide-y divide-slate-100 rounded-[24px] border border-slate-200 bg-white px-5 shadow-xl">
+        <section id="faq" className="scroll-mt-28 pb-24 pt-16">
+          <div className="mx-auto max-w-2xl px-4 md:px-6">
+            <h2 className="text-center text-2xl font-bold text-slate-950 md:text-3xl">Preguntas frecuentes</h2>
+            <p className="mt-3 text-center text-[15px] text-slate-600">Las respuestas practicas antes de enviar tus datos.</p>
+            <div className="mt-10 divide-y divide-slate-100 rounded-3xl border border-slate-200 bg-white px-1 shadow-lg">
               {FAQ.map((item, i) => (
-                <div key={item.q} className="py-1">
+                <div key={item.q}>
                   <button
                     type="button"
                     onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                    className="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left"
+                    className="flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-5 text-left"
                   >
-                    <span className="text-[15px] font-bold text-slate-900">{item.q}</span>
+                    <span className="text-[15px] font-semibold text-slate-900">{item.q}</span>
                     <ChevronDown open={openFaq === i} />
                   </button>
-                  {openFaq === i && <p className="pb-5 text-[14px] leading-relaxed text-slate-600">{item.a}</p>}
+                  {openFaq === i && (
+                    <p className="px-5 pb-5 text-[14px] leading-relaxed text-slate-600">{item.a}</p>
+                  )}
                 </div>
               ))}
             </div>
@@ -258,44 +323,42 @@ export default function App() {
         </section>
       </main>
 
-      <footer id="aviso-legal" className="scroll-mt-28 border-t border-slate-200 bg-slate-950 py-14 text-sm text-slate-400">
-        <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 md:flex-row md:justify-between md:px-6">
-          <div>
-            <VedisaMark light />
-            <p className="mt-4 max-w-sm text-[13px] leading-relaxed">
-              Produccion oficial en <strong>rematatuauto.cl</strong> y <strong>rematatuauto.com</strong> (mismo deploy).
-              Despliegue y DNS en <code className="text-slate-300">docs/DESPLEGUE-Y-DOMINIO.md</code>.
-            </p>
-            <div className="mt-6 space-y-4 text-[11px] leading-relaxed text-slate-500">
-              {footerLegalDraft.map((p, idx) => (
+      <footer id="legales" className="scroll-mt-28 border-t border-slate-800 bg-slate-950 py-14 text-sm text-slate-400">
+        <div className="mx-auto flex max-w-5xl flex-col gap-12 px-4 md:flex-row md:justify-between md:px-6">
+          <div className="max-w-md">
+            <VedisaLogo variant="footer" />
+            <div className="mt-8 space-y-4 text-[12px] leading-relaxed">
+              {footerLegalShort.map((p, idx) => (
                 <p key={idx}>{p}</p>
               ))}
             </div>
           </div>
-          <div className="flex flex-wrap gap-x-12 gap-y-6 text-[13px] font-semibold">
+          <div className="flex flex-wrap gap-12 md:justify-end">
             <div>
-              <div className="font-black uppercase tracking-wider text-white">Documentos oficiales Vedisa</div>
-              <div className="mt-4 space-y-2">
-                <a className="block hover:text-white" href={TERMS_URL}>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-white">Enlaces legales</div>
+              <div className="mt-4 space-y-3">
+                <a className="block font-semibold hover:text-white" href={TERMS_URL} target="_blank" rel="noopener noreferrer">
                   Terminos y condiciones
                 </a>
-                <a className="block hover:text-white" href={PRIVACY_URL}>
+                <a className="block font-semibold hover:text-white" href={PRIVACY_URL} target="_blank" rel="noopener noreferrer">
                   Politica de privacidad
                 </a>
               </div>
             </div>
             <div>
-              <div className="font-black uppercase tracking-wider text-white">Contacto</div>
-              <div className="mt-4 space-y-2">
-                <span className="block">Contact center +56 9 8932 3397</span>
+              <div className="text-[11px] font-bold uppercase tracking-wider text-white">Contacto Vedisa Remates</div>
+              <div className="mt-4 space-y-3 text-[13px]">
+                <a href="tel:+56989323397" className="block hover:text-white">
+                  +56 9 8932 3397
+                </a>
                 <span className="block">Americo Vespucio 2880, Piso 7, Santiago</span>
-                <span className="block">Exhibicion: Arturo Prat 6457, Pudahuel</span>
+                <span className="block">Arturo Prat 6457, Noviciado, Pudahuel</span>
               </div>
             </div>
           </div>
         </div>
-        <p className="mx-auto mt-12 max-w-6xl px-4 text-[11px] text-slate-600 md:px-6">
-          Vedisa Remates · {new Date().getFullYear()}
+        <p className="mx-auto mt-12 max-w-5xl px-4 text-[11px] text-slate-600 md:px-6">
+          Rematatuauto.cl y rematatuauto.com por Vedisa Remates &middot; {new Date().getFullYear()}
         </p>
       </footer>
 
@@ -303,7 +366,7 @@ export default function App() {
         href={WHATSAPP_HREF}
         target="_blank"
         rel="noopener noreferrer"
-        className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl shadow-black/25 transition hover:scale-105 md:hidden"
+        className="fixed bottom-5 right-5 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-xl md:hidden"
         aria-label="Abrir WhatsApp"
       >
         <svg viewBox="0 0 24 24" className="h-7 w-7" fill="currentColor" aria-hidden>

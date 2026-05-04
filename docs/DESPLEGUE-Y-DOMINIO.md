@@ -74,7 +74,7 @@ Sin este redirect, ambos siguen funcionando como **dos entradas** al mismo SPA.
 
 ## 7. Revision juridica
 
-Antes de campanas grandes, hacer revisar los textos en `src/content/legalDraft.ts`, el pie legal y la aceptacion del formulario por asesoria interna/abogacia.
+Antes de campanas grandes, hacer revisar los textos en `src/content/legalCopy.ts`, el pie legal y la aceptacion del formulario por asesoria interna/abogacia.
 
 ## 8. Smoke test post-deploy
 
