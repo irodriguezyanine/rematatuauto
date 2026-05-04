@@ -1,0 +1,17 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+  --color-vedisa-cyan: #33c7e3;
+  --color-vedisa-gold: #ffc600;
+  --color-vedisa-dark: #0a1628;
+  --color-vedisa-muted: #64748b;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+}
