@@ -13,6 +13,7 @@ import {
 import { uploadImageToCloudinary } from '@/lib/uploadCloudinary'
 
 export type LeadPrefill = {
+  patente?: string
   anio?: string
   marca?: string
   modelo?: string
@@ -37,14 +38,10 @@ function buildComentarios(
   const u = user.trim()
   const lines: string[] = []
   if (u) lines.push(u)
-  if (ar && (ar.precio_retoma != null || ar.precio_publicacion != null || ar.precio_vedisa != null)) {
-    const bits: string[] = ['Referencias de mercado (orientativas):']
-    if (ar.version) bits.push(`Version indicativa: ${ar.version}`)
-    if (ar.color) bits.push(`Color: ${ar.color}`)
-    if (ar.precio_retoma != null) bits.push(`Retoma orientativa: ${formatClPeso(ar.precio_retoma)}`)
-    if (ar.precio_publicacion != null) bits.push(`Publicacion orientativa: ${formatClPeso(ar.precio_publicacion)}`)
-    if (ar.precio_vedisa != null) bits.push(`Valor negocio orientativo: ${formatClPeso(ar.precio_vedisa)}`)
-    lines.push(bits.join('\n'))
+  if (ar && ar.precio_vedisa != null) {
+    lines.push(
+      `Precio aproximado a rematar por Vedisa Remates previo inspección: ${formatClPeso(ar.precio_vedisa)}`,
+    )
   }
   if (consentLogLine) lines.push(consentLogLine)
   return lines.join('\n\n').trim()
@@ -94,6 +91,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
 
   useEffect(() => {
     if (!prefill || Object.keys(prefill).length === 0) return
+    if (prefill.patente) setPatente(normalizePatente(prefill.patente))
     if (prefill.anio) setAnio(prefill.anio)
     if (prefill.marca) setMarca(prefill.marca)
     if (prefill.modelo) setModelo(prefill.modelo)
@@ -436,37 +434,22 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
             </div>
           </div>
 
-          {autoredData &&
-            (autoredData.precio_retoma != null ||
-              autoredData.precio_publicacion != null ||
-              autoredData.precio_vedisa != null) && (
-              <div className="rounded-2xl border border-cyan-100 bg-gradient-to-br from-cyan-50/80 to-white px-5 py-4">
-                <p className="text-xs font-bold uppercase tracking-wider text-cyan-900">Referencias de mercado</p>
-                <p className="mt-1 text-xs text-slate-600">
-                  Cifras orientativas. La tasacion definitiva la confirma Vedisa al revisar el vehiculo y la operacion.
-                </p>
-                <div className="mt-4 grid gap-3 sm:grid-cols-3">
-                  {autoredData.precio_retoma != null && (
-                    <div className="rounded-xl bg-white px-4 py-3 shadow-sm ring-1 ring-slate-100">
-                      <div className="text-[11px] font-bold uppercase tracking-wide text-slate-500">Retoma orientativa</div>
-                      <div className="mt-1 text-lg font-bold text-slate-900">{formatClPeso(autoredData.precio_retoma)}</div>
-                    </div>
-                  )}
-                  {autoredData.precio_publicacion != null && (
-                    <div className="rounded-xl bg-white px-4 py-3 shadow-sm ring-1 ring-slate-100">
-                      <div className="text-[11px] font-bold uppercase tracking-wide text-slate-500">Publicacion orientativa</div>
-                      <div className="mt-1 text-lg font-bold text-slate-900">{formatClPeso(autoredData.precio_publicacion)}</div>
-                    </div>
-                  )}
-                  {autoredData.precio_vedisa != null && (
-                    <div className="rounded-xl bg-white px-4 py-3 shadow-sm ring-1 ring-slate-100">
-                      <div className="text-[11px] font-bold uppercase tracking-wide text-slate-500">Valor negocio orientativo</div>
-                      <div className="mt-1 text-lg font-bold text-slate-900">{formatClPeso(autoredData.precio_vedisa)}</div>
-                    </div>
-                  )}
+          {autoredData?.precio_vedisa != null && (
+            <div className="rounded-2xl border border-cyan-100 bg-gradient-to-br from-cyan-50/90 to-white px-5 py-5 shadow-sm shadow-cyan-900/5">
+              <p className="text-xs font-bold uppercase tracking-wider text-cyan-900">Referencia Vedisa</p>
+              <p className="mt-2 text-[13px] font-medium leading-snug text-slate-800 md:text-[14px]">
+                Precio aproximado a rematar por Vedisa Remates previo inspección
+              </p>
+              <p className="mt-1 text-xs text-slate-600">
+                Cifra orientativa no vinculante. La tasación definitiva corresponde a la revisión técnico-comercial aplicable.
+              </p>
+              <div className="mt-4 rounded-xl bg-white px-5 py-4 shadow-md ring-1 ring-slate-100">
+                <div className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">
+                  {formatClPeso(autoredData.precio_vedisa)}
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
           <div className="grid gap-6 md:grid-cols-2">
             <div className="md:col-span-2">

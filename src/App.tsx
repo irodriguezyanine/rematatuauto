@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { LandingForm, type LeadPrefill } from '@/components/LandingForm'
 import { VedisaLogo } from '@/components/VedisaLogo'
 import { footerLegalShort, PRIVACY_URL, TERMS_URL } from '@/content/legalCopy'
 import { defaultCanonicalHref } from '@/lib/productionDomains'
-import { WHATSAPP_HREF } from '@/lib/config'
-import { yearRange } from '@/lib/format'
+import { fetchAutoredByLicensePlate } from '@/lib/autored'
+import { getSupabaseAutoredConfig, WHATSAPP_HREF } from '@/lib/config'
+import { normalizePatente, yearRange } from '@/lib/format'
 
 const LINKS = [
   {
@@ -80,22 +81,62 @@ function ChevronDown({ open }: { open: boolean }) {
   )
 }
 
-function HeroQuickLead({
-  onSubmit,
-}: {
-  onSubmit: (data: LeadPrefill) => void
-}) {
+function labelClassName() {
+  return 'mb-2 block text-left text-[13px] font-semibold tracking-tight text-slate-700'
+}
+
+function HeroQuickLead({ onSubmit }: { onSubmit: (data: LeadPrefill) => void }) {
   const years = yearRange()
+  const supabaseReady = !!getSupabaseAutoredConfig()
+  const [patenteRaw, setPatenteRaw] = useState('')
   const [anio, setAnio] = useState(String(years[0]))
   const [marca, setMarca] = useState('')
   const [modelo, setModelo] = useState('')
+  const [lookupLoading, setLookupLoading] = useState(false)
+  const [lookupHint, setLookupHint] = useState<string | null>(null)
+  const lastLookupRef = useRef('')
+
+  const patenteNorm = normalizePatente(patenteRaw)
+
+  useEffect(() => {
+    if (patenteNorm.length < 5 || !supabaseReady) {
+      lastLookupRef.current = ''
+      if (patenteNorm.length < 5) setLookupHint(null)
+      setLookupLoading(false)
+      return
+    }
+    if (patenteNorm === lastLookupRef.current) return
+
+    const timer = window.setTimeout(async () => {
+      setLookupLoading(true)
+      setLookupHint(null)
+      const res = await fetchAutoredByLicensePlate(patenteNorm)
+      setLookupLoading(false)
+      if (!res.ok) {
+        lastLookupRef.current = ''
+        setLookupHint(
+          'No encontramos datos automáticos para esa patente. Puedes completar año, marca y modelo manualmente.',
+        )
+        return
+      }
+      lastLookupRef.current = patenteNorm
+      setLookupHint('Completamos datos desde la patente. Revísalos y sigue cuando quieras.')
+      const d = res.data
+      if (d.marca) setMarca(d.marca)
+      if (d.modelo) setModelo(d.modelo)
+      if (d.ano) setAnio(d.ano)
+    }, 650)
+
+    return () => window.clearTimeout(timer)
+  }, [patenteNorm, supabaseReady])
 
   return (
     <form
-      className="mt-10 grid gap-3 sm:grid-cols-[1fr_1fr_1fr_auto]"
+      className="mt-8 space-y-4"
       onSubmit={(e) => {
         e.preventDefault()
         onSubmit({
+          ...(patenteNorm.length >= 5 ? { patente: patenteNorm } : {}),
           ...(anio ? { anio } : {}),
           ...(marca.trim() ? { marca: marca.trim() } : {}),
           ...(modelo.trim() ? { modelo: modelo.trim() } : {}),
@@ -103,45 +144,79 @@ function HeroQuickLead({
         document.getElementById('cotizar')?.scrollIntoView({ behavior: 'smooth' })
       }}
     >
-      <div>
-        <label className="mb-2 block text-left text-[11px] font-bold uppercase tracking-wider text-slate-600">Año</label>
-        <select
-          value={anio}
-          onChange={(e) => setAnio(e.target.value)}
-          className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-[15px] font-semibold text-slate-900 outline-none ring-slate-200 focus:ring-2"
-        >
-          {years.map((y) => (
-            <option key={y} value={String(y)}>
-              {y}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div>
-        <label className="mb-2 block text-left text-[11px] font-bold uppercase tracking-wider text-slate-600">Marca</label>
+      <div className="max-w-md">
+        <label htmlFor="hero-patente" className={labelClassName()}>
+          Patente <span className="font-normal text-slate-500">(opcional)</span>
+        </label>
         <input
-          value={marca}
-          onChange={(e) => setMarca(e.target.value)}
-          placeholder="Ej. Hyundai"
-          className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-[15px] outline-none focus:ring-2 focus:ring-slate-200"
+          id="hero-patente"
+          value={patenteRaw}
+          onChange={(e) => setPatenteRaw(normalizePatente(e.target.value))}
+          placeholder="Ej. ABCD12"
+          maxLength={8}
+          autoComplete="off"
+          spellCheck={false}
+          inputMode="text"
+          aria-busy={lookupLoading}
+          className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-[15px] font-semibold uppercase tracking-widest text-slate-900 outline-none placeholder:font-semibold placeholder:normal-case placeholder:tracking-normal placeholder:text-slate-400 focus:border-cyan-300 focus:ring-2 focus:ring-cyan-200/60"
         />
+        {(lookupLoading || lookupHint) && (
+          <p className={`mt-2 text-xs leading-relaxed ${lookupLoading ? 'text-slate-500' : 'text-cyan-800'}`}>
+            {lookupLoading ? 'Consultando patente…' : lookupHint}
+          </p>
+        )}
       </div>
-      <div>
-        <label className="mb-2 block text-left text-[11px] font-bold uppercase tracking-wider text-slate-600">Modelo</label>
-        <input
-          value={modelo}
-          onChange={(e) => setModelo(e.target.value)}
-          placeholder="Ej. Tucson"
-          className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-[15px] outline-none focus:ring-2 focus:ring-slate-200"
-        />
-      </div>
-      <div className="flex items-end">
-        <button
-          type="submit"
-          className="w-full shrink-0 rounded-2xl bg-slate-900 px-8 py-3.5 text-[15px] font-bold text-white transition hover:bg-slate-800 sm:w-auto"
-        >
-          Pedir tasación
-        </button>
+
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_minmax(0,1fr)_auto] lg:items-end">
+        <div>
+          <label htmlFor="hero-anio" className={labelClassName()}>
+            año
+          </label>
+          <select
+            id="hero-anio"
+            value={anio}
+            onChange={(e) => setAnio(e.target.value)}
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-[15px] font-semibold text-slate-900 outline-none focus:border-slate-300 focus:ring-2 focus:ring-slate-200"
+          >
+            {years.map((y) => (
+              <option key={y} value={String(y)}>
+                {y}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label htmlFor="hero-marca" className={labelClassName()}>
+            marca
+          </label>
+          <input
+            id="hero-marca"
+            value={marca}
+            onChange={(e) => setMarca(e.target.value)}
+            placeholder="Ej. Hyundai"
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-[15px] outline-none focus:border-slate-300 focus:ring-2 focus:ring-slate-200"
+          />
+        </div>
+        <div className="sm:col-span-2 lg:col-span-1">
+          <label htmlFor="hero-modelo" className={labelClassName()}>
+            modelo
+          </label>
+          <input
+            id="hero-modelo"
+            value={modelo}
+            onChange={(e) => setModelo(e.target.value)}
+            placeholder="Ej. Tucson"
+            className="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3.5 text-[15px] outline-none focus:border-slate-300 focus:ring-2 focus:ring-slate-200"
+          />
+        </div>
+        <div className="sm:col-span-2 lg:col-span-1">
+          <button
+            type="submit"
+            className="w-full rounded-2xl bg-slate-900 px-6 py-3.5 text-[15px] font-bold text-white shadow-lg shadow-slate-900/15 transition hover:bg-slate-800 lg:min-w-[10.5rem]"
+          >
+            Pedir tasación
+          </button>
+        </div>
       </div>
     </form>
   )
@@ -220,8 +295,9 @@ export default function App() {
               <p className="text-center text-sm font-bold text-slate-800">Completa estos datos como primer paso</p>
               <HeroQuickLead onSubmit={(d) => setLeadPrefill(d)} />
               <p className="mt-5 text-center text-xs leading-relaxed text-slate-500">
-                Con <span className="font-semibold text-slate-600">Pedir tasación</span> pasas al formulario completo: patente, kilometraje y fotos
-                del vehículo.
+                Si ingresaste patente válida, rellenamos año, marca y modelo como en el tasador completo (puedes
+                editarlos). Con <span className="font-semibold text-slate-600">Pedir tasación</span> pasas al formulario para
+                estado, kilometraje, fotos y datos de contacto.
               </p>
             </div>
           </div>
