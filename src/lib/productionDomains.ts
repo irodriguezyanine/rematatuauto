@@ -21,3 +21,20 @@ export function defaultCanonicalHref(): string | null {
   if (!isProductionDomainHost(hostname)) return null
   return `${origin.replace(/\/$/, '')}/`
 }
+
+/** Canonico para rutas públicas (/ y /tasar, etc.). */
+export function canonicalHrefForPath(pathname: string): string | null {
+  if (typeof window === 'undefined') return null
+  const normalized = pathname === '/' || pathname === '' ? '/' : pathname.startsWith('/') ? pathname : `/${pathname}`
+
+  const explicit = import.meta.env.VITE_PUBLIC_SITE_URL?.trim()
+  if (explicit) {
+    const base = explicit.replace(/\/$/, '')
+    return normalized === '/' ? `${base}/` : `${base}${normalized}`
+  }
+
+  const { hostname, origin } = window.location
+  if (!isProductionDomainHost(hostname)) return null
+  const o = origin.replace(/\/$/, '')
+  return normalized === '/' ? `${o}/` : `${o}${normalized}`
+}

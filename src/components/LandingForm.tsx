@@ -316,17 +316,17 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
     <section id={id} className="mx-auto max-w-3xl">
       <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-900/[0.06] md:p-10">
         <div className="mb-10 text-center md:text-left">
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">Formulario de tasacion</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">Formulario de tasación</h2>
           <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-slate-600">
-            Con esta informacion el equipo comercial puede preparar tu caso. Los valores mostrados en pantalla son referenciales
-            hasta confirmacion presencial o documental segun corresponda.
+            Con esta información el equipo comercial puede preparar tu caso. Los valores mostrados en pantalla son referenciales
+            hasta confirmación presencial o documental, según corresponda.
           </p>
         </div>
 
         <form onSubmit={onSubmit} className="space-y-10">
           <div className="grid gap-6 md:grid-cols-2">
             <div className="md:col-span-2">
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">Patente</label>
+              <label className="block text-[13px] font-semibold tracking-tight text-slate-700">patente</label>
               <input
                 value={patente}
                 onChange={(e) => onPatenteInput(e.target.value)}
@@ -348,7 +348,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
                   {autoredLoading && (
                     <>
                       <span className="inline-block h-3 w-3 animate-spin rounded-full border-2 border-cyan-500 border-t-transparent" />
-                      Buscando datos del vehiculo…
+                      Buscando datos del vehículo…
                     </>
                   )}
                   {!autoredLoading && autoredHint && <span className="text-cyan-800">{autoredHint}</span>}
@@ -375,7 +375,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">Año</label>
+              <label className="block text-[13px] font-semibold tracking-tight text-slate-700">año</label>
               <select
                 value={anio}
                 onChange={(e) => setAnio(e.target.value)}
@@ -393,7 +393,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">Marca</label>
+              <label className="block text-[13px] font-semibold tracking-tight text-slate-700">marca</label>
               <input
                 value={marca}
                 onChange={(e) => setMarca(e.target.value)}
@@ -406,7 +406,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">Modelo</label>
+              <label className="block text-[13px] font-semibold tracking-tight text-slate-700">modelo</label>
               <input
                 value={modelo}
                 onChange={(e) => setModelo(e.target.value)}
