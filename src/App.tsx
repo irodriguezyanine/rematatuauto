@@ -9,19 +9,19 @@ import { yearRange } from '@/lib/format'
 const LINKS = [
   {
     title: 'Remates Vedisa',
-    desc: 'Vehiculos siniestrados y subastas en curso.',
+    desc: 'Vehículos siniestrados y subastas en curso.',
     href: 'https://vehiculoschocados.cl/',
     cta: 'Ver remates',
   },
   {
-    title: 'Catalogo Vedisa',
+    title: 'Catálogo Vedisa',
     desc: 'Inventario oficial y unidades destacadas.',
     href: 'https://catalogo.vedisaremates.cl/',
-    cta: 'Abrir catalogo',
+    cta: 'Abrir catálogo',
   },
   {
-    title: 'Vehiculos de ocasion',
-    desc: 'Seminuevos y stock listo entre particulares Vedisa.',
+    title: 'Vehículos de ocasión',
+    desc: 'Seminuevos y stock listo con respaldo Vedisa.',
     href: 'https://vehiculosdeocasion.cl/',
     cta: 'Ver stock',
   },
@@ -29,39 +29,39 @@ const LINKS = [
 
 const STEPS = [
   {
-    title: 'Cuentanos tu auto',
-    body: 'Completa patente y datos: si podemos, completamos modelo y referencias de forma automatica.',
+    title: 'Cuéntanos tu auto',
+    body: 'Completa patente y datos: cuando es posible, completamos modelo y referencias de forma automática.',
   },
   {
     title: 'Fotos claras',
-    body: 'Cuanto mas detalle aportes, mas precisa puede ser la primera conversacion con tu ejecutivo.',
+    body: 'Cuánto más detalle aportes, más precisa puede ser la primera conversación con tu ejecutivo.',
   },
   {
-    title: 'Revision comercial',
-    body: 'Negocio Vedisa analiza tu caso y agenda el siguiente paso: valor final sujeto a inspeccion donde corresponda.',
+    title: 'Revisión comercial',
+    body: 'El equipo Vedisa analiza tu caso y agenda el siguiente paso; el valor final puede quedar sujeto a inspección presencial cuando corresponda.',
   },
   {
-    title: 'Remate y publicacion',
-    body: 'El vehiculo puede ingresar al circuito Vedisa de remate u otras rutas comerciales definidas con el equipo.',
+    title: 'Remate y publicación',
+    body: 'El vehículo puede ingresar al circuito Vedisa de remate u otras rutas comerciales acordadas con el equipo.',
   },
 ] as const
 
 const FAQ = [
   {
-    q: 'Tiene costo dejar una solicitud?',
-    a: 'No. Usar este formulario como primer contacto es sin cargo para el propietario.',
+    q: '¿Tiene costo dejar una solicitud?',
+    a: 'No. Usar este formulario como primer contacto es sin cargo para el titular.',
   },
   {
-    q: 'Cuanto demora el contacto inicial?',
-    a: 'Priorizamos las solicitudes durante horario laboral en Chile. El equipo comercial responde llamada, correo o WhatsApp segun lo que indiques.',
+    q: '¿Cuánto demora el contacto inicial?',
+    a: 'Priorizamos las solicitudes en horario laboral en Chile. El equipo responde por llamada, correo o WhatsApp según lo que indiques.',
   },
   {
-    q: 'Las cifras que veo son valor final de remate?',
-    a: 'Las referencias en pantalla son solo orientativas. El valor y condiciones aplicables dependen del negocio vigente cuando se revise el vehiculo.',
+    q: '¿Las cifras que veo son el valor final de remate?',
+    a: 'Las referencias en pantalla son orientativas. El valor y las condiciones dependen del análisis comercial cuando se revise el vehículo.',
   },
   {
-    q: 'Puedo ver el auto en bodega?',
-    a: 'Si el proceso lo permite, coordina inspeccion presencial con tu ejecutivo Vedisa.',
+    q: '¿Puedo ver el auto en bodega?',
+    a: 'Si el proceso lo permite, coordina una inspección presencial con tu ejecutivo Vedisa.',
   },
 ] as const
 
@@ -104,7 +104,7 @@ function HeroQuickLead({
       }}
     >
       <div>
-        <label className="mb-2 block text-left text-[11px] font-bold uppercase tracking-wider text-slate-600">Anio</label>
+        <label className="mb-2 block text-left text-[11px] font-bold uppercase tracking-wider text-slate-600">Año</label>
         <select
           value={anio}
           onChange={(e) => setAnio(e.target.value)}
@@ -140,7 +140,7 @@ function HeroQuickLead({
           type="submit"
           className="w-full shrink-0 rounded-2xl bg-slate-900 px-8 py-3.5 text-[15px] font-bold text-white transition hover:bg-slate-800 sm:w-auto"
         >
-          Pedir tasacion
+          Pedir tasación
         </button>
       </div>
     </form>
@@ -165,23 +165,23 @@ export default function App() {
   }, [])
 
   return (
-    <div className="min-h-screen bg-[#fafbfc] text-slate-900">
-      <header className="sticky top-0 z-50 border-b border-slate-200/80 bg-white/95 backdrop-blur-md">
-        <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-3 md:px-6">
-          <a href="#" className="flex items-center">
+    <div className="min-h-screen bg-[#f6f8fa] text-slate-900">
+      <header className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/90 shadow-sm backdrop-blur-lg">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-4 py-3.5 md:px-8">
+          <a href="#" className="flex min-w-0 items-center gap-2 py-0.5 transition opacity-95 hover:opacity-100">
             <VedisaLogo variant="header" />
           </a>
-          <nav className="hidden items-center gap-8 text-sm font-semibold text-slate-600 md:flex">
-            <a href="#como-funciona" className="transition hover:text-slate-900">
-              Como funciona
+          <nav className="hidden items-center gap-1 text-[13px] font-semibold text-slate-600 md:flex">
+            <a href="#como-funciona" className="rounded-full px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900">
+              Cómo funciona
             </a>
-            <a href="#cotizar" className="transition hover:text-slate-900">
+            <a href="#cotizar" className="rounded-full px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900">
               Tasar mi auto
             </a>
-            <a href="#faq" className="transition hover:text-slate-900">
+            <a href="#faq" className="rounded-full px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900">
               Preguntas
             </a>
-            <a href="#legales" className="transition hover:text-slate-900">
+            <a href="#legales" className="rounded-full px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900">
               Legales
             </a>
           </nav>
@@ -189,79 +189,93 @@ export default function App() {
             href={WHATSAPP_HREF}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden rounded-full border border-slate-200 bg-white px-5 py-2.5 text-sm font-bold text-slate-900 transition hover:bg-slate-50 sm:inline-flex"
+            className="hidden items-center gap-2 rounded-full bg-[#25D366] px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-emerald-600/25 transition hover:brightness-105 hover:shadow-lg sm:inline-flex"
           >
+            <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.074-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.057-.001c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 0 2.875 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.694.626.712.226 1.359.194 1.868.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.379l-.361-.215-3.741.983.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c0-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.884 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.496 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.889-5.335 11.892-11.892a11.821 11.821 0 00-3.48-8.413z" />
+            </svg>
             WhatsApp
           </a>
         </div>
       </header>
 
       <main>
-        <section className="relative border-b border-slate-100 bg-white">
-          <div className="mx-auto max-w-5xl px-4 pb-16 pt-12 md:px-6 md:pb-24 md:pt-16">
-            <p className="text-center text-sm font-semibold text-slate-500">REMATA TU AUTO by VEDISA REMATES</p>
-            <h1 className="mx-auto mt-4 max-w-3xl text-center text-4xl font-bold leading-[1.12] tracking-tight text-slate-950 md:text-5xl lg:text-[3.125rem]">
-              Remata tu vehiculo con quien lleva anos maximizando el recupero en Chile
+        <section className="relative overflow-hidden border-b border-slate-200/80 bg-white">
+          <div className="pointer-events-none absolute -left-24 top-0 h-[420px] w-[420px] rounded-full bg-gradient-to-br from-cyan-300/25 via-sky-200/15 to-transparent blur-3xl" />
+          <div className="pointer-events-none absolute -right-32 top-20 h-[360px] w-[360px] rounded-full bg-gradient-to-bl from-amber-200/20 via-yellow-100/15 to-transparent blur-3xl" />
+          <div className="pointer-events-none absolute bottom-0 left-1/2 h-px w-[min(100%,64rem)] -translate-x-1/2 bg-gradient-to-r from-transparent via-slate-200/80 to-transparent" />
+          <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-12 md:px-8 md:pb-28 md:pt-16">
+            <p className="text-center text-[11px] font-bold uppercase tracking-[0.22em] text-slate-500">
+              REMATA TU AUTO · VEDISA REMATES
+            </p>
+            <h1 className="mx-auto mt-5 max-w-4xl text-center text-[2rem] font-bold leading-[1.12] tracking-tight text-slate-950 sm:text-4xl md:text-5xl lg:text-[3.25rem]">
+              Remata tu vehículo con quien lleva años maximizando el recupero en Chile
             </h1>
-            <p className="mx-auto mt-5 max-w-2xl text-center text-lg text-slate-600 md:text-xl">
-              Una experiencia de venta enfocada en claridad como en grandes plataformas digitales, adaptada al negocio de
-              autos siniestrados y perdidos con los estandares Vedisa.
+            <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-relaxed text-slate-600 md:text-xl">
+              Proceso en línea, transparente y acompañado por ejecutivos comerciales: tasación orientativa, documentación y
+              publicación en el ecosistema Vedisa.
             </p>
 
-            <div className="mx-auto mt-12 max-w-3xl rounded-3xl border border-slate-100 bg-slate-50/80 p-6 shadow-xl shadow-slate-900/[0.06] md:p-8">
+            <div className="mx-auto mt-14 max-w-3xl rounded-[1.75rem] border border-slate-200/90 bg-white/80 p-6 shadow-[0_24px_80px_-12px_rgba(15,23,42,0.12)] ring-1 ring-white/60 backdrop-blur-sm md:p-9">
               <p className="text-center text-sm font-bold text-slate-800">Completa estos datos como primer paso</p>
               <HeroQuickLead onSubmit={(d) => setLeadPrefill(d)} />
-              <p className="mt-4 text-center text-xs text-slate-500">
-                Usa Pedir tasacion para bajar hasta el formulario completo donde ingresaras patente, kilometraje y fotos del
-                auto.
+              <p className="mt-5 text-center text-xs leading-relaxed text-slate-500">
+                Con <span className="font-semibold text-slate-600">Pedir tasación</span> pasas al formulario completo: patente, kilometraje y fotos
+                del vehículo.
               </p>
             </div>
           </div>
         </section>
 
-        <section id="como-funciona" className="scroll-mt-28 border-b border-slate-100 bg-white py-16 md:py-24">
-          <div className="mx-auto max-w-5xl px-4 md:px-6">
-            <h2 className="text-center text-2xl font-bold text-slate-950 md:text-3xl">Como avanza tu proceso con Vedisa</h2>
-            <p className="mx-auto mt-3 max-w-2xl text-center text-[15px] leading-relaxed text-slate-600">
-              Pensado para lograr menos fricciones y mas conversion: titulares directos y pasos concretos, similar en espiritu al
-              flujo de cotizacion de{' '}
-              <a href="https://www.kavak.com/cl/vende-tu-auto" target="_blank" rel="noopener noreferrer" className="font-semibold text-cyan-700 underline decoration-cyan-400/60">
-                Kavak — Vende tu auto
-              </a>
-              .
+        <section id="como-funciona" className="scroll-mt-28 border-b border-slate-200/80 bg-gradient-to-b from-white via-[#f8fafc] to-white py-20 md:py-28">
+          <div className="mx-auto max-w-6xl px-4 md:px-8">
+            <h2 className="text-center text-[1.65rem] font-bold tracking-tight text-slate-950 md:text-3xl lg:text-[2rem]">
+              Cómo avanza tu proceso con Vedisa
+            </h2>
+            <p className="mx-auto mt-4 max-w-2xl text-center text-[15px] leading-relaxed text-slate-600 md:text-[16px]">
+              Pasos ordenados para titulares: recopilamos la información esencial, homologamos criterios con el equipo
+              comercial y avanzamos hacia tasación confirmada y publicación cuando corresponda.
             </p>
-            <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-7">
               {STEPS.map((step, idx) => (
-                <article key={step.title} className="relative rounded-2xl border border-slate-100 bg-[#fafbfc] p-6 pt-12">
-                  <span className="absolute left-6 top-6 flex h-8 w-8 items-center justify-center rounded-full bg-[#33C7E3] text-sm font-bold text-white">
+                <article
+                  key={step.title}
+                  className="group relative rounded-2xl border border-slate-200/80 bg-white p-6 pt-14 shadow-[0_4px_24px_-8px_rgba(15,23,42,0.08)] transition duration-300 hover:-translate-y-0.5 hover:border-slate-300/90 hover:shadow-[0_20px_40px_-16px_rgba(15,23,42,0.12)]"
+                >
+                  <span className="absolute left-6 top-6 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#33C7E3] to-[#0ea5e9] text-sm font-bold text-white shadow-lg shadow-cyan-500/30">
                     {idx + 1}
                   </span>
                   <h3 className="text-lg font-bold text-slate-900">{step.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-600">{step.body}</p>
+                  <p className="mt-3 text-[14px] leading-relaxed text-slate-600">{step.body}</p>
                 </article>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="border-b border-slate-100 bg-[#0f172a] py-12 text-center text-white">
-          <div className="mx-auto max-w-3xl px-4 md:px-6">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#33C7E3]">Maximizar recupero vehicular</p>
-            <h2 className="mt-3 text-2xl font-bold md:text-3xl">Miles de unidades liquidadas con respaldo documental Vedisa</h2>
-            <p className="mt-4 text-[15px] leading-relaxed text-slate-300">
-              El formulario siguiente concentra toda la informacion que necesitamos para hacerte volver llamada rapido.
+        <section className="relative border-b border-slate-900 bg-gradient-to-br from-[#0f172a] via-[#0c1222] to-[#0f172a] py-14 text-center text-white md:py-16">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(51,199,227,0.18),transparent)]" />
+          <div className="relative mx-auto max-w-3xl px-4 md:px-8">
+            <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#5ee6ff]/90">
+              Maximizar recupero vehicular
+            </p>
+            <h2 className="mt-4 text-[1.5rem] font-bold leading-snug md:text-3xl">
+              Miles de unidades liquidadas con respaldo documental Vedisa
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-slate-300">
+              El formulario siguiente concentra la información necesaria para devolverte la llamada con prioridad durante el día hábil.
             </p>
             <a
               href="#cotizar"
-              className="mt-8 inline-flex rounded-2xl bg-[#FFC600] px-8 py-4 text-sm font-bold text-slate-900 transition hover:brightness-105"
+              className="mt-9 inline-flex rounded-2xl bg-[#FFC600] px-9 py-4 text-sm font-bold text-slate-900 shadow-lg shadow-amber-500/25 transition hover:brightness-105 active:scale-[0.98]"
             >
               Ir al formulario completo
             </a>
           </div>
         </section>
 
-        <section id="cotizar" className="scroll-mt-24 bg-[#fafbfc] py-16 md:py-20">
-          <div className="mx-auto max-w-5xl px-4 md:px-6">
+        <section id="cotizar" className="scroll-mt-24 bg-[#f6f8fa] py-16 md:py-24">
+          <div className="mx-auto max-w-6xl px-4 md:px-8">
             <LandingForm
               id="cotizar-form"
               prefill={leadPrefill}
@@ -270,17 +284,17 @@ export default function App() {
           </div>
         </section>
 
-        <section id="referidos" className="scroll-mt-28 border-t border-slate-100 bg-white py-20">
-          <div className="mx-auto max-w-5xl px-4 md:px-6">
-            <h2 className="text-2xl font-bold text-slate-950 md:text-3xl">Tambien te puede interesar</h2>
-            <p className="mt-2 max-w-2xl text-[15px] text-slate-600">
-              Remates en linea VehiculosChocados.cl, catalogo Vedisa oficial y automotora Vehiculos de ocasion.
+        <section id="referidos" className="scroll-mt-28 border-t border-slate-200/80 bg-white py-20 md:py-24">
+          <div className="mx-auto max-w-6xl px-4 md:px-8">
+            <h2 className="text-2xl font-bold tracking-tight text-slate-950 md:text-3xl">También te puede interesar</h2>
+            <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-slate-600">
+              Remates en línea en VehículosChocados.cl, catálogo oficial Vedisa y automotora Vehículos de ocasión.
             </p>
-            <div className="mt-10 grid gap-6 md:grid-cols-3">
+            <div className="mt-12 grid gap-6 md:grid-cols-3 md:gap-8">
               {LINKS.map((item) => (
                 <article
                   key={item.href}
-                  className="flex flex-col rounded-3xl border border-slate-100 bg-white p-7 shadow-lg shadow-slate-900/[0.04] transition hover:-translate-y-0.5 hover:shadow-xl"
+                  className="flex flex-col rounded-[1.5rem] border border-slate-200/80 bg-gradient-to-b from-white to-slate-50/50 p-8 shadow-[0_12px_40px_-16px_rgba(15,23,42,0.1)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-20px_rgba(15,23,42,0.14)]"
                 >
                   <h3 className="text-lg font-bold text-slate-900">{item.title}</h3>
                   <p className="mt-2 flex-1 text-sm leading-relaxed text-slate-600">{item.desc}</p>
@@ -298,11 +312,15 @@ export default function App() {
           </div>
         </section>
 
-        <section id="faq" className="scroll-mt-28 pb-24 pt-16">
-          <div className="mx-auto max-w-2xl px-4 md:px-6">
-            <h2 className="text-center text-2xl font-bold text-slate-950 md:text-3xl">Preguntas frecuentes</h2>
-            <p className="mt-3 text-center text-[15px] text-slate-600">Las respuestas practicas antes de enviar tus datos.</p>
-            <div className="mt-10 divide-y divide-slate-100 rounded-3xl border border-slate-200 bg-white px-1 shadow-lg">
+        <section id="faq" className="scroll-mt-28 bg-[#f6f8fa] pb-28 pt-16 md:pt-20">
+          <div className="mx-auto max-w-2xl px-4 md:px-8">
+            <h2 className="text-center text-2xl font-bold tracking-tight text-slate-950 md:text-3xl">
+              Preguntas frecuentes
+            </h2>
+            <p className="mt-3 text-center text-[15px] text-slate-600">
+              Respuestas prácticas antes de enviar tus datos.
+            </p>
+            <div className="mt-11 divide-y divide-slate-200/90 rounded-[1.5rem] border border-slate-200 bg-white px-1 shadow-[0_16px_48px_-20px_rgba(15,23,42,0.1)]">
               {FAQ.map((item, i) => (
                 <div key={item.q}>
                   <button
@@ -323,8 +341,8 @@ export default function App() {
         </section>
       </main>
 
-      <footer id="legales" className="scroll-mt-28 border-t border-slate-800 bg-slate-950 py-14 text-sm text-slate-400">
-        <div className="mx-auto flex max-w-5xl flex-col gap-12 px-4 md:flex-row md:justify-between md:px-6">
+      <footer id="legales" className="scroll-mt-28 border-t border-slate-800 bg-slate-950 py-16 text-sm text-slate-400">
+        <div className="mx-auto flex max-w-6xl flex-col gap-14 px-4 md:flex-row md:justify-between md:gap-12 md:px-8">
           <div className="max-w-md">
             <VedisaLogo variant="footer" />
             <div className="mt-8 space-y-4 text-[12px] leading-relaxed">
@@ -338,10 +356,10 @@ export default function App() {
               <div className="text-[11px] font-bold uppercase tracking-wider text-white">Enlaces legales</div>
               <div className="mt-4 space-y-3">
                 <a className="block font-semibold hover:text-white" href={TERMS_URL} target="_blank" rel="noopener noreferrer">
-                  Terminos y condiciones
+                  Términos y condiciones
                 </a>
                 <a className="block font-semibold hover:text-white" href={PRIVACY_URL} target="_blank" rel="noopener noreferrer">
-                  Politica de privacidad
+                  Política de privacidad
                 </a>
               </div>
             </div>
@@ -351,13 +369,13 @@ export default function App() {
                 <a href="tel:+56989323397" className="block hover:text-white">
                   +56 9 8932 3397
                 </a>
-                <span className="block">Americo Vespucio 2880, Piso 7, Santiago</span>
+                <span className="block">Américo Vespucio 2880, Piso 7, Santiago</span>
                 <span className="block">Arturo Prat 6457, Noviciado, Pudahuel</span>
               </div>
             </div>
           </div>
         </div>
-        <p className="mx-auto mt-12 max-w-5xl px-4 text-[11px] text-slate-600 md:px-6">
+        <p className="mx-auto mt-14 max-w-6xl border-t border-slate-900/80 px-4 pt-8 text-[11px] text-slate-600 md:px-8">
           Rematatuauto.cl y rematatuauto.com por Vedisa Remates &middot; {new Date().getFullYear()}
         </p>
       </footer>

@@ -121,12 +121,12 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
       setAutoredLoading(false)
       if (!res.ok) {
         setAutoredData(null)
-        setAutoredHint('No encontramos datos automaticos para esta patente. Completa marca y modelo a mano.')
+        setAutoredHint('No encontramos datos automáticos para esta patente. Completa marca y modelo a mano.')
         return
       }
       lastLookupRef.current = p
       setAutoredData(res.data)
-      setAutoredHint('Completamos algunos campos con tu patente. Verificalos antes de enviar.')
+      setAutoredHint('Completamos algunos campos con tu patente. Verifícalos antes de enviar.')
       const d = res.data
       if (d.marca) setMarca(d.marca)
       if (d.modelo) setModelo(d.modelo)
@@ -342,7 +342,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
               {errors.patente && <p className="mt-2 text-sm font-semibold text-red-600">{errors.patente}</p>}
               {!supabaseReady && (
                 <p className="mt-2 text-xs text-slate-500">
-                  Si no ves sugerencias automaticas al escribir la patente, completa marca y modelo manualmente.
+                  Si no ves sugerencias automáticas al escribir la patente, completa marca y modelo manualmente.
                 </p>
               )}
               {supabaseReady && (
@@ -359,7 +359,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">Estado del vehiculo</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">Estado del vehículo</label>
               <select
                 value={estado}
                 onChange={(e) => setEstado(e.target.value)}
@@ -377,7 +377,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
             </div>
 
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">Ano</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">Año</label>
               <select
                 value={anio}
                 onChange={(e) => setAnio(e.target.value)}

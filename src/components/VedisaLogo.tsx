@@ -5,19 +5,20 @@ type VedisaLogoProps = {
   variant?: 'header' | 'footer'
 }
 
-/** Logo Vedisa oficial — archivo en /public/logo-vedisaremates.png */
+/** Logo Vedisa oficial — PNG con fondo tratado para transparencia en /public/logo-vedisaremates.png */
 export function VedisaLogo({ className = '', variant = 'header' }: VedisaLogoProps) {
-  const wrapper =
-    variant === 'footer'
-      ? 'inline-flex rounded-2xl bg-white px-4 py-3 shadow-sm ring-1 ring-white/10'
-      : 'inline-flex rounded-2xl bg-neutral-950 px-4 py-2.5 shadow-md ring-1 ring-black/10'
+  const isFooter = variant === 'footer'
 
   return (
-    <div className={`${wrapper} ${className}`.trim()}>
+    <div
+      className={`inline-flex items-center ${isFooter ? 'drop-shadow-[0_1px_12px_rgba(0,0,0,0.35)]' : ''} ${className}`.trim()}
+    >
       <img
         src={LOGO_SRC}
         alt="VEDISA REMATES"
-        className="h-9 w-auto max-w-[220px] object-contain object-left md:h-11 md:max-w-[260px]"
+        className={`h-9 w-auto max-w-[200px] object-contain object-left md:h-10 md:max-w-[240px] ${
+          isFooter ? 'brightness-110 contrast-105' : ''
+        }`}
         width={260}
         height={72}
         loading="eager"
