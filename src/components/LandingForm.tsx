@@ -30,17 +30,46 @@ const ESTADOS = [
   { value: 'No funciona', label: 'No funciona (no anda)' },
 ] as const
 
+/** Factor sobre precio_vedisa (AUTORED) según estado declarado en el formulario. */
+function factorReferenciaPorEstado(estado: string): number {
+  switch (estado) {
+    case 'No funciona':
+      return 0.35
+    case 'Funciona con problemas':
+      return 0.55
+    case 'Funciona':
+      return 1
+    default:
+      return 1
+  }
+}
+
+function precioReferenciaMostrada(precioBase: number, estado: string): number {
+  const f = factorReferenciaPorEstado(estado)
+  return Math.round(precioBase * f)
+}
+
+function porcentajeEstadoEtiqueta(estado: string): string | null {
+  const f = factorReferenciaPorEstado(estado)
+  if (f >= 1) return null
+  return `${Math.round(f * 100)}%`
+}
+
 function buildComentarios(
   user: string,
   ar: AutoredVehicleInfo | null,
+  estado: string,
   consentLogLine: string | null,
 ): string {
   const u = user.trim()
   const lines: string[] = []
   if (u) lines.push(u)
   if (ar && ar.precio_vedisa != null) {
+    const base = ar.precio_vedisa
+    const f = factorReferenciaPorEstado(estado)
+    const mostrada = precioReferenciaMostrada(base, estado)
     lines.push(
-      `Referencia orientativa de remate (previa inspección, canal Remata tu auto / Vedisa): ${formatClPeso(ar.precio_vedisa)}`,
+      `AUTORED/Vedisa referencial base: ${formatClPeso(base)}. Estado indicado: ${estado}. Porcentaje aplicado en pantalla: ${Math.round(f * 100)}%. Referencia mostrada: ${formatClPeso(mostrada)}.`,
     )
   }
   if (consentLogLine) lines.push(consentLogLine)
@@ -258,6 +287,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
         buildComentarios(
           comentarios,
           autoredData,
+          estado,
           'El usuario aceptó términos, política de privacidad y contacto comercial en rematatuauto (Remata tu auto).',
         ),
       )
@@ -277,6 +307,11 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
       setSubmitting(false)
     }
   }
+
+  const precioBaseAutored = autoredData?.precio_vedisa ?? null
+  const precioMostrado =
+    precioBaseAutored != null ? precioReferenciaMostrada(precioBaseAutored, estado) : null
+  const etiquetaAjustePct = porcentajeEstadoEtiqueta(estado)
 
   if (success) {
     return (
@@ -440,18 +475,25 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
             </div>
           </div>
 
-          {autoredData?.precio_vedisa != null && (
+          {precioBaseAutored != null && precioMostrado != null && (
             <div className="rounded-2xl border border-cyan-100 bg-gradient-to-br from-cyan-50/90 to-white px-5 py-5 shadow-sm shadow-cyan-900/5">
               <p className="text-xs font-bold uppercase tracking-wider text-cyan-900">Referencia orientativa de remate</p>
               <p className="mt-2 text-[13px] font-medium leading-snug text-slate-800 md:text-[14px]">
                 Aproximación previa a inspección o revisión documental. No es oferta ni precio final.
               </p>
               <p className="mt-1 text-xs text-slate-600">
-                Misma referencia que usa el canal comercial Vedisa Remates; sujetá a cambios según estado real del vehículo.
+                Valor base según datos AUTORED/Vedisa; si indicaste que el auto tiene problemas o no anda, aplicamos un factor
+                sobre ese valor para la referencia mostrada.
               </p>
+              {etiquetaAjustePct && (
+                <p className="mt-2 text-xs font-semibold text-cyan-900">
+                  Ajuste por estado declarado: {etiquetaAjustePct} del valor referencial base (
+                  {formatClPeso(precioBaseAutored)}).
+                </p>
+              )}
               <div className="mt-4 rounded-xl bg-white px-5 py-4 shadow-md ring-1 ring-slate-100">
                 <div className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">
-                  {formatClPeso(autoredData.precio_vedisa)}
+                  {formatClPeso(precioMostrado)}
                 </div>
               </div>
             </div>
