@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { fetchAutoredByLicensePlate } from '@/lib/autored'
 import { getSupabaseAutoredConfig } from '@/lib/config'
+import { GoogleReviewsCarousel } from '@/components/GoogleReviewsCarousel'
 import { REFERRAL_LINKS } from '@/content/siteContent'
 import { normalizePatente, yearRange } from '@/lib/format'
 import type { LeadPrefill } from '@/components/LandingForm'
@@ -68,37 +69,6 @@ function PainPointIcon({
     </span>
   )
 }
-
-const TRUST_STATS = [
-  { value: '40+', label: 'años en el rubro', hint: 'Remates, stock y operación en Chile' },
-  { value: '100%', label: 'canal sin costo para dejar tu solicitud', hint: 'Primer contacto desde esta web' },
-  { value: '360°', label: 'del dato básico a la publicación', hint: 'Cuando corresponde al circuito comercial' },
-] as const
-
-const WHY_BULLETS = [
-  'Proceso guiado: menos fricción que publicar solo en clasificados.',
-  'Referencias de mercado en pantalla cuando hay datos disponibles (no son precio final).',
-  'Un mismo canal sirve para auto que anda, con problemas o bajo siniestro.',
-  'WhatsApp y teléfono visibles para quien prefiere hablar antes de enviar el formulario.',
-] as const
-
-const TESTIMONIALS = [
-  {
-    quote: 'Tenía el auto publicado hace meses. En una semana ya tenía propuesta y siguiente paso claro.',
-    name: 'Cliente particular',
-    meta: 'Santiago, 2025',
-  },
-  {
-    quote: 'Choque total y no sabía si convenía reparar. Me explicaron opciones sin presión.',
-    name: 'Titular asegurado',
-    meta: 'Región Metropolitana',
-  },
-  {
-    quote: 'Respuesta rápida por WhatsApp. Adjunté fotos y acotamos expectativas desde el inicio.',
-    name: 'Vendedor urgente',
-    meta: 'Chile',
-  },
-] as const
 
 const HERO_BULLETS = [
   'Tasa y remata tu vehículo sin costo.',
@@ -332,78 +302,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="border-b border-slate-200/80 bg-white py-14 md:py-20">
-        <div className="mx-auto max-w-6xl px-4 md:px-8">
-          <h2 className="text-center text-xs font-bold uppercase tracking-[0.2em] text-slate-500">Confianza y alcance</h2>
-          <div className="mt-10 grid gap-8 md:grid-cols-3">
-            {TRUST_STATS.map((s) => (
-              <div
-                key={s.label}
-                className="rounded-2xl border border-slate-100 bg-gradient-to-b from-slate-50/50 to-white px-6 py-8 text-center shadow-sm"
-              >
-                <div className="text-3xl font-black tracking-tight text-slate-900 md:text-4xl">{s.value}</div>
-                <p className="mt-3 text-[14px] font-semibold leading-snug text-slate-800">{s.label}</p>
-                <p className="mt-2 text-xs text-slate-500">{s.hint}</p>
-              </div>
-            ))}
-          </div>
-          <ul className="mx-auto mt-12 grid max-w-4xl gap-3 md:grid-cols-2">
-            {WHY_BULLETS.map((t) => (
-              <li
-                key={t}
-                className="flex gap-3 rounded-xl border border-slate-100 bg-slate-50/50 px-4 py-3 text-[13px] leading-relaxed text-slate-700"
-              >
-                <span className="font-bold text-cyan-600">+</span>
-                <span>{t}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      <section className="border-b border-slate-200/80 bg-white py-16 md:py-20">
-        <div className="mx-auto max-w-6xl px-4 md:px-8">
-          <h2 className="text-center text-2xl font-bold tracking-tight text-slate-950 md:text-3xl">Historias breves</h2>
-          <p className="mx-auto mt-3 max-w-xl text-center text-[15px] text-slate-600">
-            Casos típicos (anonimizados) de quienes necesitaban cerrar el capítulo del auto.
-          </p>
-          <div className="mt-12 grid gap-6 md:grid-cols-3">
-            {TESTIMONIALS.map((t) => (
-              <blockquote
-                key={t.quote}
-                className="flex h-full flex-col rounded-2xl border border-slate-200/80 bg-slate-50/40 p-7 shadow-sm"
-              >
-                <p className="flex-1 text-[14px] leading-relaxed text-slate-700">&ldquo;{t.quote}&rdquo;</p>
-                <footer className="mt-6 border-t border-slate-200/80 pt-4">
-                  <cite className="not-italic">
-                    <span className="block text-sm font-bold text-slate-900">{t.name}</span>
-                    <span className="text-xs text-slate-500">{t.meta}</span>
-                  </cite>
-                </footer>
-              </blockquote>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="relative border-b border-slate-900 bg-gradient-to-br from-[#0f172a] via-[#0c1222] to-[#0f172a] py-14 text-center text-white md:py-20">
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(51,199,227,0.22),transparent)]" />
-        <div className="relative mx-auto max-w-3xl px-4 md:px-8">
-          <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#5ee6ff]/90">Siguiente paso</p>
-          <h2 className="mt-4 text-[1.5rem] font-bold leading-snug md:text-3xl">
-            Miles de unidades han pasado por circuitos de remate y stock profesional
-          </h2>
-          <p className="mx-auto mt-5 max-w-xl text-[15px] leading-relaxed text-slate-300">
-            Completa el formulario: cuanto más preciso seas con fotos y estado, más útil será la primera devolución del equipo.
-          </p>
-          <Link
-            to={TASAR_PATH}
-            className="mt-9 inline-flex rounded-2xl bg-[#FFC600] px-9 py-4 text-sm font-bold text-slate-900 shadow-lg shadow-amber-500/25 transition hover:brightness-105 active:scale-[0.98]"
-          >
-            Completar tasación ahora
-          </Link>
-        </div>
-      </section>
+      <GoogleReviewsCarousel />
 
       <section id="referidos" className="scroll-mt-28 border-t border-slate-200/80 bg-slate-50/50 py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-4 md:px-8">
