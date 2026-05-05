@@ -12,23 +12,62 @@ const PAIN_POINTS = [
     title: 'No vendiste por el canal tradicional',
     body: 'Meses en portales, visitas que no cierran o compradores poco serios. Aquí evaluamos tu caso con criterio comercial y siguientes pasos claros.',
     icon: '↗',
+    iconKind: 'glyph' as const,
   },
   {
     title: 'Necesitas liquidez rápida',
     body: 'Cambio de auto, mudanza, imprevisto o necesidad de efectivo. Priorizamos el contacto en horario hábil para acortar plazos cuando el proceso lo permite.',
     icon: '⚡',
+    iconKind: 'glyph' as const,
   },
   {
     title: 'Auto chocado o con daños',
     body: 'Siniestro, peritaje pendiente o auto que no conviene reparar. Te orientamos sobre remate y alternativas según documentación y estado real.',
     icon: '⎔',
+    iconKind: 'glyph' as const,
   },
   {
     title: 'Poco tiempo para publicar y filtrar',
     body: 'Sin energía para fotos, llamadas y negociación. Centralizas datos y fotos una vez; el equipo comercial retoma con una propuesta de trabajo.',
     icon: '✓',
+    iconKind: 'glyph' as const,
+  },
+  {
+    title: 'Red de grúas propias en todo Chile',
+    body: 'Si tu vehículo no se puede mover, o bien, no puedes traerlo, cotiza el traslado con nuestra red en todo el país.',
+    icon: '',
+    iconKind: 'tow' as const,
   },
 ] as const
+
+function PainPointIcon({
+  icon,
+  iconKind,
+  accentClass,
+}: {
+  icon: string
+  iconKind: 'glyph' | 'tow'
+  accentClass: string
+}) {
+  if (iconKind === 'tow') {
+    return (
+      <span className={`mb-4 flex h-10 w-10 items-center justify-center rounded-xl text-cyan-700 ${accentClass}`}>
+        <svg className="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.85} aria-hidden>
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M6.75 15.75h-.75A2.25 2.25 0 013.75 13.5v-6a2.25 2.25 0 012.25-2.25h6a2.25 2.25 0 012.25 2.25v.75M9 3.75v12m4.5-7.5h3.75a1.5 1.5 0 011.06.44l2.72 2.72a1.5 1.5 0 01.44 1.06V15a2.25 2.25 0 01-2.25 2.25h-.75M6 18.75a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm12 0a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"
+          />
+        </svg>
+      </span>
+    )
+  }
+  return (
+    <span className={`mb-4 flex h-10 w-10 items-center justify-center rounded-xl text-lg ${accentClass}`}>
+      {icon}
+    </span>
+  )
+}
 
 const TRUST_STATS = [
   { value: '40+', label: 'años en el rubro', hint: 'Remates, stock y operación en Chile' },
@@ -270,19 +309,25 @@ export default function HomePage() {
             Si alguna de estas situaciones te suena, estás en el lugar correcto. No prometemos magia: sí un canal serio y seguimiento
             comercial.
           </p>
-          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-            {PAIN_POINTS.map((item) => (
-              <article
-                key={item.title}
-                className="flex h-full flex-col rounded-2xl border border-slate-200/90 bg-white p-6 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.12)] transition hover:-translate-y-0.5 hover:border-cyan-200/80 hover:shadow-[0_16px_40px_-16px_rgba(15,23,42,0.14)]"
-              >
-                <span className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-lg text-cyan-700">
-                  {item.icon}
-                </span>
-                <h3 className="text-base font-bold text-slate-900">{item.title}</h3>
-                <p className="mt-3 flex-1 text-[13px] leading-relaxed text-slate-600">{item.body}</p>
-              </article>
-            ))}
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 lg:gap-6">
+            {PAIN_POINTS.map((item) => {
+              const accentClass =
+                item.iconKind === 'tow'
+                  ? 'bg-sky-50 ring-1 ring-sky-100/90'
+                  : item.icon === '⚡'
+                    ? 'bg-amber-50 text-amber-600 ring-1 ring-amber-100/80'
+                    : 'bg-cyan-50 text-cyan-700 ring-1 ring-cyan-100/80'
+              return (
+                <article
+                  key={item.title}
+                  className="flex h-full flex-col rounded-2xl border border-slate-200/90 bg-white p-6 shadow-[0_8px_30px_-12px_rgba(15,23,42,0.12)] transition hover:-translate-y-0.5 hover:border-cyan-200/80 hover:shadow-[0_16px_40px_-16px_rgba(15,23,42,0.14)]"
+                >
+                  <PainPointIcon icon={item.icon} iconKind={item.iconKind} accentClass={accentClass} />
+                  <h3 className="text-base font-bold text-slate-900">{item.title}</h3>
+                  <p className="mt-3 flex-1 text-[13px] leading-relaxed text-slate-600">{item.body}</p>
+                </article>
+              )
+            })}
           </div>
         </div>
       </section>

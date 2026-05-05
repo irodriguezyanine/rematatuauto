@@ -1,5 +1,39 @@
 import { Link } from 'react-router-dom'
 import { VedisaLogo } from '@/components/VedisaLogo'
+import { TASAR_PATH } from '@/routes'
+
+const VEDISA_PORTALES = [
+  {
+    title: 'Vedisa Remates',
+    href: 'https://www.vedisaremates.cl/',
+    description:
+      'Portal principal del grupo: presencia institucional, líneas de negocio y punto de contacto con Vedisa Remates en Chile.',
+  },
+  {
+    title: 'Catálogo Vedisa',
+    href: 'https://catalogo.vedisaremates.cl/',
+    description:
+      'Catálogo oficial de stock: unidades disponibles, fichas y acceso al inventario que complementa remates y ventas del ecosistema.',
+  },
+  {
+    title: 'Vehículos de ocasión',
+    href: 'https://vehiculosdeocasion.cl/',
+    description:
+      'Automotora de seminuevos y vehículos de ocasión para quien busca comprar con respaldo del mismo grupo operativo.',
+  },
+  {
+    title: 'Vehículos Chocados',
+    href: 'https://www.vehiculoschocados.cl/',
+    description:
+      'Plataforma de remates en línea orientada a siniestrados y vehículos chocados, con subastas y información para postores.',
+  },
+  {
+    title: 'Remata tu auto',
+    href: 'https://www.rematatuauto.com/',
+    description:
+      'Este canal para titulares: tasación orientativa, solicitud en línea y coordinación con ejecutivos para remate o venta.',
+  },
+] as const
 
 export default function QuienesSomosPage() {
   return (
@@ -54,8 +88,50 @@ export default function QuienesSomosPage() {
             >
               Llamar: +56 9 8932 3397
             </a>
+            <p className="mt-4 text-center text-xs text-slate-500">
+              También puedes avanzar desde{' '}
+              <Link to={TASAR_PATH} className="font-semibold text-cyan-700 underline-offset-2 hover:underline">
+                tasar en esta web
+              </Link>
+              .
+            </p>
           </div>
         </div>
+
+        <section className="mt-20 border-t border-slate-200/80 pt-16 md:mt-24 md:pt-20" aria-labelledby="ecosistema-vedisa">
+          <h2 id="ecosistema-vedisa" className="text-xl font-bold tracking-tight text-slate-950 md:text-2xl">
+            Ecosistema digital Vedisa Remates
+          </h2>
+          <p className="mt-3 max-w-3xl text-[15px] leading-relaxed text-slate-600">
+            Accesos directos a cada portal del grupo. Elige según si vendes, compras en remate, revisas catálogo u ocasión.
+          </p>
+          <ul className="mt-10 grid gap-5 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3" role="list">
+            {VEDISA_PORTALES.map((portal) => (
+              <li key={portal.href}>
+                <a
+                  href={portal.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-full flex-col rounded-2xl border border-slate-200/90 bg-gradient-to-b from-white to-slate-50/40 p-6 shadow-[0_8px_28px_-12px_rgba(15,23,42,0.1)] transition hover:-translate-y-0.5 hover:border-cyan-200/80 hover:shadow-[0_16px_40px_-16px_rgba(15,23,42,0.12)]"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="text-base font-bold text-slate-900">{portal.title}</h3>
+                    <span className="shrink-0 rounded-lg bg-cyan-50 px-2 py-1 text-[11px] font-bold uppercase tracking-wide text-cyan-800">
+                      Visitar
+                    </span>
+                  </div>
+                  <p className="mt-3 flex-1 text-[13px] leading-relaxed text-slate-600">{portal.description}</p>
+                  <p className="mt-4 break-all text-[12px] font-semibold text-cyan-700 underline decoration-cyan-500/35 underline-offset-4">
+                    {portal.href.replace(/^https:\/\//, '')}
+                    <span className="ml-1 inline-block text-slate-400 no-underline" aria-hidden>
+                      ↗
+                    </span>
+                  </p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
       </div>
     </main>
   )
