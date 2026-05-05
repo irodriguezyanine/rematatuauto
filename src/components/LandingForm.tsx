@@ -319,7 +319,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
     <section id={id} className="mx-auto max-w-3xl">
       <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-900/[0.06] md:p-10">
         <div className="mb-10 text-center md:text-left">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-cyan-700">Formulario completo</p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-cyan-700">Remata tu auto</p>
           <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">
             Tasación y contacto — prioridad en horario hábil
           </h2>

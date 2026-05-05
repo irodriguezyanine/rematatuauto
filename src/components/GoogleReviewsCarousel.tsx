@@ -42,18 +42,15 @@ export function GoogleReviewsCarousel() {
             <h2 id="reviews-carousel-title" className="mt-2 text-2xl font-bold tracking-tight text-slate-950 md:text-3xl">
               Lo que comentan quienes vendieron con nosotros
             </h2>
-            <p className="mt-2 max-w-xl text-[14px] leading-relaxed text-slate-600">
-              Ejemplos ilustrativos con formato similar a reseñas <span className="font-semibold text-slate-800">Google</span>{' '}
-              (5 estrellas). No constituyen opiniones verificadas en plataformas externas. Para opiniones públicas reales, puedes{' '}
+            <p className="mt-3">
               <a
                 href="https://www.google.com/search?q=Vedisa+Remates"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-semibold text-cyan-700 underline decoration-cyan-500/40 underline-offset-2 hover:decoration-cyan-600"
+                className="text-[13px] font-normal text-slate-500/75 underline decoration-slate-300/70 underline-offset-[3px] transition hover:text-slate-600 hover:decoration-slate-400/80"
               >
-                revisar Vedisa Remates en Google
+                Revisar Vedisa Remates en Google
               </a>
-              .
             </p>
           </div>
           <div className="flex shrink-0 gap-2 md:pb-1">
