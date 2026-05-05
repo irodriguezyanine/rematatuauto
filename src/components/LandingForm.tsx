@@ -481,10 +481,6 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
               <p className="mt-2 text-[13px] font-medium leading-snug text-slate-800 md:text-[14px]">
                 Aproximación previa a inspección o revisión documental. No es oferta ni precio final.
               </p>
-              <p className="mt-1 text-xs text-slate-600">
-                Valor base según datos AUTORED/Vedisa; si indicaste que el auto tiene problemas o no anda, aplicamos un factor
-                sobre ese valor para la referencia mostrada.
-              </p>
               {etiquetaAjustePct && (
                 <p className="mt-2 text-xs font-semibold text-cyan-900">
                   Ajuste por estado declarado: {etiquetaAjustePct} del valor referencial base (
