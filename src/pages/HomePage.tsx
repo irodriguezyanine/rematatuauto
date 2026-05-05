@@ -1,32 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { VedisaLogo } from '@/components/VedisaLogo'
 import { fetchAutoredByLicensePlate } from '@/lib/autored'
 import { getSupabaseAutoredConfig } from '@/lib/config'
+import { REFERRAL_LINKS } from '@/content/siteContent'
 import { normalizePatente, yearRange } from '@/lib/format'
 import type { LeadPrefill } from '@/components/LandingForm'
 import { TASAR_PATH } from '@/routes'
-
-const LINKS = [
-  {
-    title: 'Remates en vivo',
-    desc: 'Vehículos siniestrados y subastas con ofertas transparentes.',
-    href: 'https://vehiculoschocados.cl/',
-    cta: 'Ver remates',
-  },
-  {
-    title: 'Catálogo de stock',
-    desc: 'Unidades revisadas e inventario actualizado.',
-    href: 'https://catalogo.vedisaremates.cl/',
-    cta: 'Abrir catálogo',
-  },
-  {
-    title: 'Vehículos de ocasión',
-    desc: 'Seminuevos y opciones listas para retiro.',
-    href: 'https://vehiculosdeocasion.cl/',
-    cta: 'Ver stock',
-  },
-] as const
 
 const PAIN_POINTS = [
   {
@@ -52,7 +31,7 @@ const PAIN_POINTS = [
 ] as const
 
 const TRUST_STATS = [
-  { value: '+15', label: 'años de operación en remates y stock', hint: 'Ecosistema chileno de vehículos' },
+  { value: '40+', label: 'años en el rubro', hint: 'Remates, stock y operación en Chile' },
   { value: '100%', label: 'canal sin costo para dejar tu solicitud', hint: 'Primer contacto desde esta web' },
   { value: '360°', label: 'del dato básico a la publicación', hint: 'Cuando corresponde al circuito comercial' },
 ] as const
@@ -62,25 +41,6 @@ const WHY_BULLETS = [
   'Referencias de mercado en pantalla cuando hay datos disponibles (no son precio final).',
   'Un mismo canal sirve para auto que anda, con problemas o bajo siniestro.',
   'WhatsApp y teléfono visibles para quien prefiere hablar antes de enviar el formulario.',
-] as const
-
-const STEPS = [
-  {
-    title: 'Cuéntanos tu auto',
-    body: 'Patente (si la tienes), año, marca y modelo. Cuando es posible, autocompletamos desde base de datos.',
-  },
-  {
-    title: 'Fotos que cuentan la historia',
-    body: 'Exterior, interior y detalle de daños. Más contexto = menos idas y vueltas en la primera conversación.',
-  },
-  {
-    title: 'Revisión comercial',
-    body: 'Analizamos tu caso y agenda. El valor definitivo puede requerir inspección o documentos adicionales.',
-  },
-  {
-    title: 'Ruta de remate o venta',
-    body: 'Si corresponde, el vehículo ingresa a canales de remate u otras alternativas acordadas contigo.',
-  },
 ] as const
 
 const TESTIMONIALS = [
@@ -101,55 +61,12 @@ const TESTIMONIALS = [
   },
 ] as const
 
-const FAQ = [
-  {
-    q: '¿Sirve si mi auto está muy dañado?',
-    a: 'Sí. Muchas solicitudes son por siniestro o daño importante. La viabilidad y el valor dependen del estado documentado y, a veces, de inspección.',
-  },
-  {
-    q: '¿Tiene costo dejar una solicitud?',
-    a: 'No. Completar el formulario como primer contacto es sin cargo para el titular.',
-  },
-  {
-    q: '¿Cuánto demora el contacto inicial?',
-    a: 'Atendemos con prioridad en horario laboral chileno. Puedes elegir llamada, correo o WhatsApp según lo que indiques.',
-  },
-  {
-    q: '¿La cifra en pantalla es lo que voy a recibir?',
-    a: 'Las referencias son orientativas. El monto y condiciones finales se confirman en el análisis comercial y/o inspección cuando aplique.',
-  },
-  {
-    q: '¿Qué pasa si no tengo la patente a mano?',
-    a: 'Puedes completar año, marca y modelo manualmente. La patente ayuda a autocompletar datos, pero no siempre es obligatoria en el primer paso del inicio.',
-  },
-  {
-    q: '¿Puedo visitar el vehículo en bodega?',
-    a: 'Cuando el proceso lo permite, coordinas una visita o inspección con tu ejecutivo.',
-  },
-  {
-    q: '¿Reemplaza esto a un comprador particular?',
-    a: 'Es una alternativa cuando el canal tradicional no entrega resultado o necesitas velocidad y un respaldo operativo.',
-  },
-  {
-    q: '¿Mis datos y fotos están protegidos?',
-    a: 'Tratamos la información conforme a la normativa vigente y la política publicada en los enlaces legales de esta página.',
-  },
+const HERO_BULLETS = [
+  'Tasa y remata tu vehículo sin costo.',
+  'Ideal si el auto lleva semanas en portales o no sabes qué hacer tras un choque.',
+  'Más de 40 años en el rubro. Proceso ágil y transparente.',
+  'Precio referencial automático, previa inspección del vehículo y sin considerar daños mayores.',
 ] as const
-
-function ChevronDown({ open }: { open: boolean }) {
-  return (
-    <svg
-      className={`h-5 w-5 shrink-0 text-slate-400 transition ${open ? 'rotate-180' : ''}`}
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      viewBox="0 0 24 24"
-      aria-hidden
-    >
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-    </svg>
-  )
-}
 
 function labelClassName() {
   return 'mb-2 block text-left text-[13px] font-semibold tracking-tight text-slate-700'
@@ -297,8 +214,6 @@ function HeroQuickLead() {
 }
 
 export default function HomePage() {
-  const [openFaq, setOpenFaq] = useState<number | null>(0)
-
   return (
     <main>
       <section className="relative overflow-hidden border-b border-slate-200/80 bg-white">
@@ -306,38 +221,28 @@ export default function HomePage() {
         <div className="pointer-events-none absolute -right-32 top-20 h-[360px] w-[360px] rounded-full bg-gradient-to-bl from-amber-200/25 via-yellow-100/20 to-transparent blur-3xl" />
         <div className="pointer-events-none absolute bottom-0 left-1/2 h-px w-[min(100%,64rem)] -translate-x-1/2 bg-gradient-to-r from-transparent via-slate-200/80 to-transparent" />
         <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-12 md:px-8 md:pb-28 md:pt-16">
-          <p className="text-center text-[11px] font-bold uppercase tracking-[0.22em] text-slate-500">
-            Tasación orientativa · Remate · Chile
+          <p className="text-center text-[11px] font-bold uppercase tracking-[0.16em] text-slate-600">
+            REMATA TU AUTO - VEDISA REMATES CHILE
           </p>
-          <h1 className="mx-auto mt-5 max-w-4xl text-center text-[2rem] font-bold leading-[1.12] tracking-tight text-slate-950 sm:text-4xl md:text-5xl lg:text-[3.15rem]">
-            ¿No lograste vender tu auto por el canal tradicional?
-            <span className="mt-2 block text-[1.35rem] font-bold leading-snug text-slate-700 sm:text-2xl md:text-[1.75rem] md:leading-snug">
-              Te ayudamos a rematar o vender con proceso claro — incluso si está chocado o necesitas liquidez rápida.
-            </span>
+          <h1 className="mx-auto mt-5 max-w-4xl text-center text-[2rem] font-bold leading-[1.15] tracking-tight text-slate-950 sm:text-4xl md:text-5xl lg:text-[3.05rem]">
+            ¿Necesitas vender tu auto pero tiene detalles?
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-center text-lg leading-relaxed text-slate-600 md:text-xl">
-            Dejas tus datos una sola vez: fotos, estado del vehículo y contacto. Un ejecutivo retoma para darte el siguiente paso
-            sin humo.
+          <p className="mx-auto mt-6 max-w-3xl text-center text-lg font-medium leading-relaxed text-slate-700 md:text-xl">
+            En Vedisa Remates rematamos todo tipo de vehículos y en cualquier condición, a través de un proceso transparente,
+            rápido y sin costo para el mandante.
           </p>
-          <ul className="mx-auto mt-8 flex max-w-3xl flex-col gap-2.5 text-left text-[14px] font-medium text-slate-700 sm:mx-auto sm:max-w-xl">
-            <li className="flex gap-2">
-              <span className="mt-0.5 text-cyan-600" aria-hidden>
-                ●
-              </span>
-              <span>Sin costo por enviar tu solicitud desde esta página.</span>
-            </li>
-            <li className="flex gap-2">
-              <span className="mt-0.5 text-cyan-600" aria-hidden>
-                ●
-              </span>
-              <span>Ideal si el auto lleva semanas en portales o no sabes qué hacer tras un choque.</span>
-            </li>
-            <li className="flex gap-2">
-              <span className="mt-0.5 text-cyan-600" aria-hidden>
-                ●
-              </span>
-              <span>Referencia de precio en pantalla cuando hay datos (siempre sujeta a revisión).</span>
-            </li>
+          <p className="mx-auto mt-5 max-w-2xl text-center text-[17px] leading-relaxed text-slate-600 md:text-lg">
+            Déjanos tus datos, fotos y estado del vehículo; un ejecutivo estudiará el caso y tomará contacto contigo.
+          </p>
+          <ul className="mx-auto mt-8 flex max-w-3xl flex-col gap-2.5 text-left text-[14px] font-medium text-slate-700 sm:max-w-2xl">
+            {HERO_BULLETS.map((line) => (
+              <li key={line} className="flex gap-2">
+                <span className="mt-0.5 shrink-0 text-cyan-600" aria-hidden>
+                  ●
+                </span>
+                <span>{line}</span>
+              </li>
+            ))}
           </ul>
 
           <div className="mx-auto mt-14 max-w-3xl rounded-[1.75rem] border border-slate-200/90 bg-white/90 p-6 shadow-[0_24px_80px_-12px_rgba(15,23,42,0.14)] ring-1 ring-white/60 backdrop-blur-sm md:p-9">
@@ -411,41 +316,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="como-funciona" className="scroll-mt-28 border-b border-slate-200/80 bg-gradient-to-b from-white via-[#f8fafc] to-white py-20 md:py-28">
-        <div className="mx-auto max-w-6xl px-4 md:px-8">
-          <h2 className="text-center text-[1.65rem] font-bold tracking-tight text-slate-950 md:text-3xl lg:text-[2rem]">
-            Cómo funciona tu proceso en Remata tu auto
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-center text-[15px] leading-relaxed text-slate-600 md:text-[16px]">
-            Pasos ordenados para titulares: reunimos información, alineamos expectativas y avanzamos hacia tasación confirmada y
-            publicación si el caso calza.
-          </p>
-          <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-4 lg:gap-7">
-            {STEPS.map((step, idx) => (
-              <article
-                key={step.title}
-                className="group relative rounded-2xl border border-slate-200/80 bg-white p-6 pt-14 shadow-[0_4px_24px_-8px_rgba(15,23,42,0.08)] transition duration-300 hover:-translate-y-0.5 hover:border-cyan-200/90 hover:shadow-[0_20px_40px_-16px_rgba(15,23,42,0.12)]"
-              >
-                <span className="absolute left-6 top-6 flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-[#33C7E3] to-[#0ea5e9] text-sm font-bold text-white shadow-lg shadow-cyan-500/30">
-                  {idx + 1}
-                </span>
-                <h3 className="text-lg font-bold text-slate-900">{step.title}</h3>
-                <p className="mt-3 text-[14px] leading-relaxed text-slate-600">{step.body}</p>
-              </article>
-            ))}
-          </div>
-          <div className="mt-14 flex flex-wrap items-center justify-center gap-4">
-            <Link
-              to={TASAR_PATH}
-              className="inline-flex rounded-2xl bg-slate-900 px-8 py-4 text-sm font-bold text-white shadow-lg transition hover:bg-slate-800"
-            >
-              Ir directo al formulario completo
-            </Link>
-            <span className="text-sm text-slate-500">Respuesta priorizada en horario hábil</span>
-          </div>
-        </div>
-      </section>
-
       <section className="border-b border-slate-200/80 bg-white py-16 md:py-20">
         <div className="mx-auto max-w-6xl px-4 md:px-8">
           <h2 className="text-center text-2xl font-bold tracking-tight text-slate-950 md:text-3xl">Historias breves</h2>
@@ -490,57 +360,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section id="quienes-somos" className="scroll-mt-28 border-t border-slate-200/80 bg-white py-20 md:py-24">
-        <div className="mx-auto max-w-6xl px-4 md:px-8">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
-            <div>
-              <h2 className="text-2xl font-bold tracking-tight text-slate-950 md:text-3xl">Quiénes somos</h2>
-              <p className="mt-4 text-[15px] leading-relaxed text-slate-600">
-                <strong className="text-slate-800">Remata tu auto</strong> es la puerta de entrada para titulares que quieren
-                rematar o vender sin enredarse. Operativamente, el proceso se apoya en{' '}
-                <strong className="text-slate-800">Vedisa Remates</strong>: empresa chilena con años trabajando remates,
-                inventario y canales digitales del segmento automotriz (incluyendo plataformas de vehículos siniestrados y stock
-                publicado).
-              </p>
-              <p className="mt-4 text-[15px] leading-relaxed text-slate-600">
-                Lo que ves en esta web es un foco en tu necesidad — liquidar, resolver un siniestro o acelerar una venta — con el
-                respaldo logístico y comercial de quien ya mueve alto volumen en el mercado.
-              </p>
-              <ul className="mt-8 space-y-3 text-[14px] text-slate-700">
-                <li className="flex gap-2">
-                  <span className="text-cyan-600">—</span>
-                  Equipos que conocen tanto autos usados como siniestrados.
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-600">—</span>
-                  Proceso documentado y alineado a términos legales publicados.
-                </li>
-                <li className="flex gap-2">
-                  <span className="text-cyan-600">—</span>
-                  Conexión natural con remates en línea, catálogo y automotora asociada.
-                </li>
-              </ul>
-            </div>
-            <div className="rounded-[1.75rem] border border-slate-200/90 bg-gradient-to-br from-slate-50 to-white p-8 shadow-[0_20px_50px_-24px_rgba(15,23,42,0.2)] md:p-10">
-              <p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Respaldo operativo</p>
-              <div className="mt-4">
-                <VedisaLogo variant="header" />
-              </div>
-              <p className="mt-6 text-[13px] leading-relaxed text-slate-600">
-                Vedisa Remates concentra la experiencia de remate y comercialización que hoy nutre este canal. Al enviar tu
-                solicitud, te contacta un ejecutivo del equipo Vedisa siguiendo los estándares del grupo.
-              </p>
-              <a
-                href="tel:+56989323397"
-                className="mt-8 inline-flex w-full items-center justify-center rounded-2xl border-2 border-slate-200 bg-white py-3.5 text-sm font-bold text-slate-900 transition hover:border-cyan-300 hover:bg-cyan-50/30"
-              >
-                Llamar: +56 9 8932 3397
-              </a>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section id="referidos" className="scroll-mt-28 border-t border-slate-200/80 bg-slate-50/50 py-20 md:py-24">
         <div className="mx-auto max-w-6xl px-4 md:px-8">
           <h2 className="text-2xl font-bold tracking-tight text-slate-950 md:text-3xl">También te puede interesar</h2>
@@ -548,7 +367,7 @@ export default function HomePage() {
             Otros canales del mismo ecosistema: remates en línea, catálogo y unidades de ocasión.
           </p>
           <div className="mt-12 grid gap-6 md:grid-cols-3 md:gap-8">
-            {LINKS.map((item) => (
+            {REFERRAL_LINKS.map((item) => (
               <article
                 key={item.href}
                 className="flex flex-col rounded-[1.5rem] border border-slate-200/80 bg-gradient-to-b from-white to-slate-50/50 p-8 shadow-[0_12px_40px_-16px_rgba(15,23,42,0.1)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_24px_48px_-20px_rgba(15,23,42,0.14)]"
@@ -567,37 +386,6 @@ export default function HomePage() {
               </article>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section id="faq" className="scroll-mt-28 bg-[#f0f2f5] pb-28 pt-16 md:pt-20">
-        <div className="mx-auto max-w-2xl px-4 md:px-8">
-          <h2 className="text-center text-2xl font-bold tracking-tight text-slate-950 md:text-3xl">Preguntas frecuentes</h2>
-          <p className="mt-3 text-center text-[15px] text-slate-600">Antes de enviar tus datos, revisa estas respuestas rápidas.</p>
-          <div className="mt-11 divide-y divide-slate-200/90 rounded-[1.5rem] border border-slate-200 bg-white px-1 shadow-[0_16px_48px_-20px_rgba(15,23,42,0.1)]">
-            {FAQ.map((item, i) => (
-              <div key={item.q}>
-                <button
-                  type="button"
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="flex w-full cursor-pointer items-center justify-between gap-4 px-5 py-5 text-left"
-                >
-                  <span className="text-[15px] font-semibold text-slate-900">{item.q}</span>
-                  <ChevronDown open={openFaq === i} />
-                </button>
-                {openFaq === i && (
-                  <p className="px-5 pb-5 text-[14px] leading-relaxed text-slate-600">{item.a}</p>
-                )}
-              </div>
-            ))}
-          </div>
-          <p className="mt-10 text-center text-sm text-slate-600">
-            ¿Sigues con dudas?{' '}
-            <Link to={TASAR_PATH} className="font-bold text-cyan-700 underline-offset-2 hover:underline">
-              Ve al formulario
-            </Link>{' '}
-            o escríbenos por WhatsApp desde el encabezado.
-          </p>
         </div>
       </section>
     </main>

@@ -5,7 +5,13 @@ import { VedisaLogo } from '@/components/VedisaLogo'
 import { footerLegalShort, PRIVACY_URL, TERMS_URL } from '@/content/legalCopy'
 import { canonicalHrefForPath } from '@/lib/productionDomains'
 import { WHATSAPP_HREF } from '@/lib/config'
-import { TASAR_PATH } from '@/routes'
+import {
+  COMO_FUNCIONA_PATH,
+  DUDAS_PATH,
+  LEGALES_PATH,
+  QUIENES_SOMOS_PATH,
+  TASAR_PATH,
+} from '@/routes'
 
 export function SiteLayout() {
   const location = useLocation()
@@ -34,8 +40,6 @@ export function SiteLayout() {
     setMobileNavOpen(false)
   }, [location.pathname, location.hash])
 
-  const hashBase = location.pathname === '/' ? '' : '/'
-
   const navLinkClass =
     'rounded-full px-3 py-2 transition hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-2 focus-visible:ring-cyan-500/40'
 
@@ -54,24 +58,21 @@ export function SiteLayout() {
             className="hidden items-center gap-0.5 text-[13px] font-semibold text-slate-600 lg:flex"
             aria-label="Principal"
           >
-            <a href={`${hashBase}#por-que`} className={navLinkClass}>
-              Tu situación
-            </a>
-            <a href={`${hashBase}#como-funciona`} className={navLinkClass}>
+            <Link to={COMO_FUNCIONA_PATH} className={navLinkClass}>
               Cómo funciona
-            </a>
-            <a href={`${hashBase}#quienes-somos`} className={navLinkClass}>
+            </Link>
+            <Link to={QUIENES_SOMOS_PATH} className={navLinkClass}>
               Quiénes somos
-            </a>
+            </Link>
             <Link to={TASAR_PATH} className={navLinkClass}>
               Tasar mi auto
             </Link>
-            <a href={`${hashBase}#faq`} className={navLinkClass}>
+            <Link to={DUDAS_PATH} className={navLinkClass}>
               Dudas
-            </a>
-            <a href={`${hashBase}#legales`} className={navLinkClass}>
+            </Link>
+            <Link to={LEGALES_PATH} className={navLinkClass}>
               Legales
-            </a>
+            </Link>
           </nav>
           <div className="flex shrink-0 items-center gap-2">
             <Link
@@ -117,24 +118,21 @@ export function SiteLayout() {
             aria-label="Navegación"
           >
             <nav className="flex flex-col gap-1 text-[15px] font-semibold text-slate-800">
-              <a href={`${hashBase}#por-que`} className="rounded-xl px-3 py-3 hover:bg-slate-50">
-                Tu situación
-              </a>
-              <a href={`${hashBase}#como-funciona`} className="rounded-xl px-3 py-3 hover:bg-slate-50">
+              <Link to={COMO_FUNCIONA_PATH} className="rounded-xl px-3 py-3 hover:bg-slate-50">
                 Cómo funciona
-              </a>
-              <a href={`${hashBase}#quienes-somos`} className="rounded-xl px-3 py-3 hover:bg-slate-50">
+              </Link>
+              <Link to={QUIENES_SOMOS_PATH} className="rounded-xl px-3 py-3 hover:bg-slate-50">
                 Quiénes somos
-              </a>
+              </Link>
               <Link to={TASAR_PATH} className="rounded-xl px-3 py-3 hover:bg-slate-50">
                 Tasar mi auto
               </Link>
-              <a href={`${hashBase}#faq`} className="rounded-xl px-3 py-3 hover:bg-slate-50">
+              <Link to={DUDAS_PATH} className="rounded-xl px-3 py-3 hover:bg-slate-50">
                 Dudas frecuentes
-              </a>
-              <a href={`${hashBase}#legales`} className="rounded-xl px-3 py-3 hover:bg-slate-50">
+              </Link>
+              <Link to={LEGALES_PATH} className="rounded-xl px-3 py-3 hover:bg-slate-50">
                 Información legal
-              </a>
+              </Link>
               <a
                 href={WHATSAPP_HREF}
                 target="_blank"
@@ -152,16 +150,19 @@ export function SiteLayout() {
         <Outlet />
       </div>
 
-      <footer id="legales" className="scroll-mt-28 border-t border-slate-800 bg-slate-950 py-16 text-sm text-slate-400">
+      <footer className="border-t border-slate-800 bg-slate-950 py-16 text-sm text-slate-400">
         <div className="mx-auto flex max-w-6xl flex-col gap-14 px-4 md:flex-row md:justify-between md:gap-12 md:px-8">
           <div className="max-w-md">
             <BrandWordmark />
             <p className="mt-4 text-[13px] leading-relaxed text-slate-400">
               Canal para titulares que necesitan vender o rematar con proceso claro y seguimiento comercial. Operación con respaldo
               Vedisa Remates —{' '}
-              <a href={`${hashBase}#quienes-somos`} className="font-semibold text-cyan-400/90 underline-offset-2 hover:underline">
+              <Link
+                to={QUIENES_SOMOS_PATH}
+                className="font-semibold text-cyan-400/90 underline-offset-2 hover:underline"
+              >
                 conoce al equipo
-              </a>
+              </Link>
               .
             </p>
             <div className="mt-8 space-y-4 text-[12px] leading-relaxed opacity-95">
@@ -174,6 +175,9 @@ export function SiteLayout() {
             <div>
               <div className="text-[11px] font-bold uppercase tracking-wider text-white">Enlaces legales</div>
               <div className="mt-4 space-y-3">
+                <Link className="block font-semibold hover:text-white" to={LEGALES_PATH}>
+                  Información legal del sitio
+                </Link>
                 <a className="block font-semibold hover:text-white" href={TERMS_URL} target="_blank" rel="noopener noreferrer">
                   Términos y condiciones
                 </a>
