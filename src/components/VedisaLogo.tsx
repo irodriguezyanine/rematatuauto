@@ -13,7 +13,7 @@ export function VedisaLogo({ className = '', variant = 'header' }: VedisaLogoPro
     <div className={`inline-flex items-center ${className}`.trim()}>
       <img
         src={LOGO_SRC}
-        alt="VEDISA REMATES — maximizar recupero vehicular"
+        alt="Vedisa Remates — respaldo operativo de Remata tu auto"
         className={`h-10 w-auto max-w-[min(100%,280px)] object-contain object-left sm:h-[2.85rem] md:h-12 md:max-w-[320px] ${
           isFooter ? 'drop-shadow-[0_2px_8px_rgba(0,0,0,0.45)]' : ''
         }`}

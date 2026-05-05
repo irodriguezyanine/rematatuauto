@@ -40,7 +40,7 @@ function buildComentarios(
   if (u) lines.push(u)
   if (ar && ar.precio_vedisa != null) {
     lines.push(
-      `Precio aproximado a rematar por Vedisa Remates previo inspección: ${formatClPeso(ar.precio_vedisa)}`,
+      `Referencia orientativa de remate (previa inspección, canal Remata tu auto / Vedisa): ${formatClPeso(ar.precio_vedisa)}`,
     )
   }
   if (consentLogLine) lines.push(consentLogLine)
@@ -143,17 +143,17 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
     const e: FieldErrors = {}
     const pat = normalizePatente(patente)
     if (!pat) e.patente = 'Ingresa la patente.'
-    if (!estado) e.estado = 'Selecciona el estado del vehiculo.'
+    if (!estado) e.estado = 'Selecciona el estado del vehículo.'
     if (!marca.trim()) e.marca = 'Ingresa la marca.'
     if (!modelo.trim()) e.modelo = 'Ingresa el modelo.'
     const y = parseInt(anio, 10)
-    if (!Number.isFinite(y) || y < 2005 || y > years[0]) e.anio = 'Ano no valido.'
+    if (!Number.isFinite(y) || y < 2005 || y > years[0]) e.anio = 'Año no válido.'
     const km = onlyDigits(kilometraje)
     if (!km) e.kilometraje = 'Ingresa el kilometraje.'
     if (!nombre.trim()) e.nombre = 'Tu nombre es obligatorio.'
-    if (!telefono.trim()) e.telefono = 'Telefono / WhatsApp obligatorio.'
-    if (!isEmailValid(email)) e.email = 'Correo no valido.'
-    if (!consentAccepted) setConsentError('Debes aceptar terminos y autorizacion de contacto para continuar.')
+    if (!telefono.trim()) e.telefono = 'Teléfono / WhatsApp obligatorio.'
+    if (!isEmailValid(email)) e.email = 'Correo no válido.'
+    if (!consentAccepted) setConsentError('Debes aceptar términos y autorización de contacto para continuar.')
     else setConsentError(null)
     setErrors(e)
     const fieldsOk = Object.keys(e).length === 0
@@ -258,7 +258,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
         buildComentarios(
           comentarios,
           autoredData,
-          'El usuario acepto terminos, politica de privacidad y contacto comercial en rematatuauto.',
+          'El usuario aceptó términos, política de privacidad y contacto comercial en rematatuauto (Remata tu auto).',
         ),
       )
       fd.append('photo_urls', photoUrlsHidden)
@@ -272,7 +272,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
       setSuccess(true)
       window.scrollTo({ top: 0, behavior: 'smooth' })
     } catch {
-      alert('No se pudo enviar el formulario. Revisa tu conexion e intenta nuevamente.')
+      alert('No se pudo enviar el formulario. Revisa tu conexión e intenta nuevamente.')
     } finally {
       setSubmitting(false)
     }
@@ -280,16 +280,19 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
 
   if (success) {
     return (
-      <section className="mx-auto max-w-lg rounded-[28px] border border-slate-200 bg-white p-10 text-center shadow-xl">
+      <section className="mx-auto max-w-lg rounded-[28px] border border-slate-200 bg-white p-10 text-center shadow-xl shadow-slate-900/10">
         <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
           <svg className="h-8 w-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden>
             <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold text-slate-900">Solicitud recibida</h2>
+        <h2 className="text-2xl font-bold text-slate-900">Listo: solicitud recibida</h2>
         <p className="mt-3 text-[15px] leading-relaxed text-slate-600">
-          Gracias por confiar en <strong>Vedisa Remates</strong>. Un ejecutivo se pondra en contacto contigo para continuar
-          con la tasacion y los siguientes pasos.
+          Gracias por usar <strong>Remata tu auto</strong>. Un ejecutivo se pondrá en contacto contigo para continuar con la
+          tasación y los siguientes pasos.
+        </p>
+        <p className="mt-2 text-[13px] text-slate-500">
+          Si es urgente, abre WhatsApp con el botón de abajo y menciona que ya enviaste el formulario.
         </p>
         <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:justify-center">
           <button
@@ -316,22 +319,25 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
     <section id={id} className="mx-auto max-w-3xl">
       <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-900/[0.06] md:p-10">
         <div className="mb-10 text-center md:text-left">
-          <h2 className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">Formulario de tasación</h2>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-cyan-700">Formulario completo</p>
+          <h2 className="mt-2 text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">
+            Tasación y contacto — prioridad en horario hábil
+          </h2>
           <p className="mt-3 max-w-xl text-[15px] leading-relaxed text-slate-600">
-            Con esta información el equipo comercial puede preparar tu caso. Los valores mostrados en pantalla son referenciales
-            hasta confirmación presencial o documental, según corresponda.
+            Con estos datos el equipo prepara tu caso: tradicional, urgente o con daños. Las cifras en pantalla son referenciales
+            hasta revisión comercial o inspección.
           </p>
         </div>
 
         <form onSubmit={onSubmit} className="space-y-10">
           <div className="grid gap-6 md:grid-cols-2">
             <div className="md:col-span-2">
-              <label className="block text-[13px] font-semibold tracking-tight text-slate-700">patente</label>
+              <label className="block text-[13px] font-semibold tracking-tight text-slate-700">Patente</label>
               <input
                 value={patente}
                 onChange={(e) => onPatenteInput(e.target.value)}
                 placeholder="ABCD12"
-                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-lg font-bold uppercase tracking-widest text-slate-900 outline-none transition placeholder:font-semibold placeholder:normal-case placeholder:tracking-normal placeholder:text-slate-300 focus:ring-2 focus:ring-slate-300 sm:max-w-md ${
+                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-lg font-bold uppercase tracking-widest text-slate-900 shadow-sm outline-none transition placeholder:font-semibold placeholder:normal-case placeholder:tracking-normal placeholder:text-slate-300 focus:ring-2 focus:ring-cyan-200 sm:max-w-md ${
                   errors.patente ? 'border-red-400 bg-red-50/50' : 'border-slate-200 bg-white'
                 }`}
                 maxLength={8}
@@ -351,7 +357,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
                       Buscando datos del vehículo…
                     </>
                   )}
-                  {!autoredLoading && autoredHint && <span className="text-cyan-800">{autoredHint}</span>}
+                  {!autoredLoading && autoredHint && <span className="font-medium text-cyan-800">{autoredHint}</span>}
                 </p>
               )}
             </div>
@@ -361,7 +367,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
               <select
                 value={estado}
                 onChange={(e) => setEstado(e.target.value)}
-                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] font-semibold text-slate-900 outline-none focus:ring-2 focus:ring-slate-200 ${
+                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] font-semibold text-slate-900 shadow-sm outline-none focus:ring-2 focus:ring-cyan-100 ${
                   errors.estado ? 'border-red-400 bg-red-50/50' : 'border-slate-200 bg-white'
                 }`}
               >
@@ -375,11 +381,11 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
             </div>
 
             <div>
-              <label className="block text-[13px] font-semibold tracking-tight text-slate-700">año</label>
+              <label className="block text-[13px] font-semibold tracking-tight text-slate-700">Año</label>
               <select
                 value={anio}
                 onChange={(e) => setAnio(e.target.value)}
-                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] font-semibold text-slate-900 outline-none focus:ring-2 focus:ring-slate-200 ${
+                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] font-semibold text-slate-900 shadow-sm outline-none focus:ring-2 focus:ring-cyan-100 ${
                   errors.anio ? 'border-red-400 bg-red-50/50' : 'border-slate-200 bg-white'
                 }`}
               >
@@ -393,12 +399,12 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
             </div>
 
             <div>
-              <label className="block text-[13px] font-semibold tracking-tight text-slate-700">marca</label>
+              <label className="block text-[13px] font-semibold tracking-tight text-slate-700">Marca</label>
               <input
                 value={marca}
                 onChange={(e) => setMarca(e.target.value)}
                 placeholder="Ej. Nissan"
-                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] outline-none focus:ring-2 focus:ring-slate-200 ${
+                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] shadow-sm outline-none focus:ring-2 focus:ring-cyan-100 ${
                   errors.marca ? 'border-red-400 bg-red-50/50' : 'border-slate-200 bg-white'
                 }`}
               />
@@ -406,12 +412,12 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
             </div>
 
             <div>
-              <label className="block text-[13px] font-semibold tracking-tight text-slate-700">modelo</label>
+              <label className="block text-[13px] font-semibold tracking-tight text-slate-700">Modelo</label>
               <input
                 value={modelo}
                 onChange={(e) => setModelo(e.target.value)}
                 placeholder="Ej. Qashqai"
-                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] outline-none focus:ring-2 focus:ring-slate-200 ${
+                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] shadow-sm outline-none focus:ring-2 focus:ring-cyan-100 ${
                   errors.modelo ? 'border-red-400 bg-red-50/50' : 'border-slate-200 bg-white'
                 }`}
               />
@@ -426,7 +432,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
                 onBlur={() => setKilometraje(formatKmDots(kilometraje))}
                 inputMode="numeric"
                 placeholder="85.000"
-                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] outline-none focus:ring-2 focus:ring-slate-200 ${
+                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] shadow-sm outline-none focus:ring-2 focus:ring-cyan-100 ${
                   errors.kilometraje ? 'border-red-400 bg-red-50/50' : 'border-slate-200 bg-white'
                 }`}
               />
@@ -436,12 +442,12 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
 
           {autoredData?.precio_vedisa != null && (
             <div className="rounded-2xl border border-cyan-100 bg-gradient-to-br from-cyan-50/90 to-white px-5 py-5 shadow-sm shadow-cyan-900/5">
-              <p className="text-xs font-bold uppercase tracking-wider text-cyan-900">Referencia Vedisa</p>
+              <p className="text-xs font-bold uppercase tracking-wider text-cyan-900">Referencia orientativa de remate</p>
               <p className="mt-2 text-[13px] font-medium leading-snug text-slate-800 md:text-[14px]">
-                Precio aproximado a rematar por Vedisa Remates previo inspección
+                Aproximación previa a inspección o revisión documental. No es oferta ni precio final.
               </p>
               <p className="mt-1 text-xs text-slate-600">
-                Cifra orientativa no vinculante. La tasación definitiva corresponde a la revisión técnico-comercial aplicable.
+                Misma referencia que usa el canal comercial Vedisa Remates; sujetá a cambios según estado real del vehículo.
               </p>
               <div className="mt-4 rounded-xl bg-white px-5 py-4 shadow-md ring-1 ring-slate-100">
                 <div className="text-2xl font-bold tracking-tight text-slate-900 md:text-3xl">
@@ -462,31 +468,33 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
               <input
                 value={nombre}
                 onChange={(e) => setNombre(e.target.value)}
-                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] outline-none focus:ring-2 focus:ring-slate-200 ${
+                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] shadow-sm outline-none focus:ring-2 focus:ring-cyan-100 ${
                   errors.nombre ? 'border-red-400 bg-red-50/50' : 'border-slate-200 bg-white'
                 }`}
               />
               {errors.nombre && <p className="mt-2 text-sm font-semibold text-red-600">{errors.nombre}</p>}
             </div>
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">Telefono / WhatsApp</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">Teléfono / WhatsApp</label>
               <input
                 value={telefono}
                 onChange={(e) => setTelefono(e.target.value)}
                 inputMode="tel"
-                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] outline-none focus:ring-2 focus:ring-slate-200 ${
+                placeholder="+56 9 XXXX XXXX"
+                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] shadow-sm outline-none focus:ring-2 focus:ring-cyan-100 ${
                   errors.telefono ? 'border-red-400 bg-red-50/50' : 'border-slate-200 bg-white'
                 }`}
               />
               {errors.telefono && <p className="mt-2 text-sm font-semibold text-red-600">{errors.telefono}</p>}
             </div>
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">Correo electronico</label>
+              <label className="block text-xs font-bold uppercase tracking-wider text-slate-500">Correo electrónico</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] outline-none focus:ring-2 focus:ring-slate-200 ${
+                placeholder="tucorreo@ejemplo.cl"
+                className={`mt-2 w-full rounded-2xl border px-4 py-3 text-[15px] shadow-sm outline-none focus:ring-2 focus:ring-cyan-100 ${
                   errors.email ? 'border-red-400 bg-red-50/50' : 'border-slate-200 bg-white'
                 }`}
               />
@@ -497,19 +505,20 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
               <textarea
                 value={comentarios}
                 onChange={(e) => setComentarios(e.target.value)}
-                rows={3}
-                className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[15px] outline-none focus:ring-2 focus:ring-slate-200"
-                placeholder="Danos, deudas, seguro, lo que consideres relevante…"
+                rows={4}
+                className="mt-2 w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-[15px] shadow-sm outline-none focus:ring-2 focus:ring-cyan-100"
+                placeholder="Ej. choque en portón trasero, deuda TAG, prendario, pérdida total declarada, prisa por vender…"
               />
             </div>
           </div>
 
           <div>
             <h3 className="border-b border-slate-100 pb-2 text-sm font-bold uppercase tracking-[0.12em] text-slate-400">
-              Fotos del vehiculo
+              Fotos del vehículo
             </h3>
             <p className="mt-2 text-sm text-slate-600">
-              Te recomendamos entre 3 y 10 imagenes: frente, laterales, interior y detalle de danos.
+              Entre 3 y 10 imágenes: frente, laterales, interior y zoom en daños. Esto acorta idas y vueltas y mejora la primera
+              respuesta.
             </p>
             <div
               className="mt-4"
@@ -527,13 +536,13 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="flex w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/80 px-4 py-10 text-center transition hover:border-cyan-300 hover:bg-cyan-50/30"
+                className="flex w-full cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/80 px-4 py-10 text-center transition hover:border-cyan-400 hover:bg-cyan-50/40"
               >
                 <span className="mb-3 text-3xl text-cyan-500" aria-hidden>
                   +
                 </span>
-                <span className="text-sm font-bold text-slate-800">Selecciona o arrastra fotos aqui</span>
-                <span className="mt-2 text-xs text-slate-500">Hasta 10 archivos</span>
+                <span className="text-sm font-bold text-slate-800">Selecciona o arrastra fotos aquí</span>
+                <span className="mt-2 text-xs text-slate-500">Hasta 10 archivos · JPG o PNG</span>
               </button>
             </div>
             <input
@@ -547,7 +556,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
             {uploadPhase && <p className="mt-3 text-sm font-semibold text-cyan-800">{uploadPhase}</p>}
             {photoError && (
               <p className="mt-3 text-sm font-bold text-red-600">
-                No pudimos subir una o mas fotos. Intenta de nuevo o continua sin adjuntos.
+                No pudimos subir una o más fotos. Intenta de nuevo o continúa sin adjuntos.
               </p>
             )}
             {files.length > 0 && (
@@ -561,7 +570,7 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
                       className="absolute right-1 top-1 flex h-7 w-7 cursor-pointer items-center justify-center rounded-lg bg-black/55 text-xs font-bold text-white transition hover:bg-black/70"
                       aria-label="Eliminar foto"
                     >
-                      x
+                      ×
                     </button>
                   </div>
                 ))}
@@ -570,15 +579,15 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
           </div>
 
           <div className="rounded-2xl border border-slate-200 bg-slate-50 px-5 py-5">
-            <p className="text-[12px] font-bold uppercase tracking-wide text-slate-600">Proteccion de datos</p>
+            <p className="text-[12px] font-bold uppercase tracking-wide text-slate-600">Protección de datos</p>
             <p className="mt-3 text-[13px] leading-relaxed text-slate-600">
-              Los datos de mercado son referenciales. Los documentos vinculantes son los publicados en nuestros{' '}
+              Los datos de mercado son referenciales. Los documentos vinculantes están en nuestros{' '}
               <a href={TERMS_URL} target="_blank" rel="noopener noreferrer" className="font-semibold text-cyan-800 underline">
-                Terminos y Condiciones
+                Términos y Condiciones
               </a>{' '}
               y{' '}
               <a href={PRIVACY_URL} target="_blank" rel="noopener noreferrer" className="font-semibold text-cyan-800 underline">
-                Politica de Privacidad
+                Política de Privacidad
               </a>
               .
             </p>
@@ -600,10 +609,13 @@ export function LandingForm({ id, prefill, onPrefillConsumed }: LandingFormProps
           <button
             type="submit"
             disabled={submitting || (!!uploadPhase && files.length > 0)}
-            className="w-full cursor-pointer rounded-2xl bg-slate-900 px-6 py-4 text-base font-bold text-white shadow-lg transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-60"
+            className="w-full cursor-pointer rounded-2xl bg-gradient-to-r from-slate-900 to-slate-800 px-6 py-4 text-base font-bold text-white shadow-lg transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-60"
           >
-            {submitting ? 'Enviando…' : 'Enviar solicitud'}
+            {submitting ? 'Enviando…' : 'Enviar y que me contacten'}
           </button>
+          <p className="-mt-4 text-center text-xs text-slate-500">
+            Sin costo por este envío. Te contactamos según los datos que indicaste.
+          </p>
         </form>
       </div>
     </section>
