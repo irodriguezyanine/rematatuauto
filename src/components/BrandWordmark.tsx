@@ -16,8 +16,8 @@ export function BrandWordmark({ className = '', asLink = false }: BrandWordmarkP
           auto
         </span>
       </span>
-      <span className="hidden text-[10px] font-bold uppercase tracking-[0.2em] text-slate-500 sm:block">
-        Vende o remata sin vueltas
+      <span className="text-[10px] font-bold uppercase tracking-[0.16em] text-slate-500 sm:text-[11px]">
+        Vedisa Remates
       </span>
     </>
   )
